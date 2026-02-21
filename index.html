@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jatin | Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#0f172a;color:#fff;overflow-x:hidden;position:relative}
+
+#matrixCanvas{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+background:#000;
+}
+
+header{position:fixed;width:100%;top:0;left:0;padding:20px 8%;display:flex;justify-content:space-between;align-items:center;background:rgba(15,23,42,0.75);backdrop-filter:blur(12px);z-index:1000}
+header h1{font-size:20px}
+nav{display:flex;gap:20px}
+nav a{color:#fff;text-decoration:none;font-size:14px}
+nav a:hover{color:#38bdf8}
+.menu-toggle{display:none;font-size:24px;cursor:pointer}
+
+section{padding:100px 8% 50px 8%}
+.hero{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.hero-text{max-width:600px;position:relative}
+.hero-text h2{font-size:44px;font-weight:800;position:relative}
+.hero-text span{position:relative;display:inline-block;color:#38bdf8}
+
+#snakeCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+
+.highlight{
+margin-top:20px;
+font-size:18px;
+font-weight:600;
+background:linear-gradient(90deg,#38bdf8,#00ffcc);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+#canvas-container{width:340px;height:340px}
+
+.card-3d{
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.15);
+padding:30px;
+border-radius:30px;
+backdrop-filter:blur(25px);
+margin-bottom:25px;
+box-shadow:0 20px 40px rgba(0,0,0,0.4);
+}
+
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:15px}
+.skill-card{background:rgba(255,255,255,0.06);padding:18px;border-radius:20px;text-align:center;transition:0.3s}
+.skill-card:hover{transform:translateY(-6px);background:rgba(56,189,248,0.3)}
+
+footer{text-align:center;padding:20px;background:#111827;margin-top:40px}
+
+@media(max-width:900px){
+nav{display:none;flex-direction:column;background:#111827;position:absolute;top:70px;right:8%;padding:15px;border-radius:10px}
+nav.active{display:flex}
+.menu-toggle{display:block}
+.hero{flex-direction:column;text-align:center}
+#canvas-container{margin-top:30px;width:260px;height:260px}
+.hero-text h2{font-size:30px}
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<header>
+<h1>Jatin</h1>
+<div class="menu-toggle" onclick="toggleMenu()">⋮</div>
+<nav id="navMenu">
+<a href="#about">About</a>
+<a href="#skills">Skills</a>
+<a href="#contact">Contact</a>
+</nav>
+</header>
+
+<section class="hero">
+<div class="hero-text">
+<h2>Hi, I'm <span id="nameText">Jatin</span></h2>
+<h2>Artificial Intelligence & Cyber Security</h2>
+<div class="highlight">
+I build AI‑driven intelligent systems & secure architectures focused on Machine Learning, System Design & Scalable Cyber Infrastructure.
+</div>
+</div>
+<div id="canvas-container"></div>
+</section>
+
+<section id="about">
+<div class="card-3d">
+<h2>About Me</h2>
+<p style="margin-top:15px;color:#e2e8f0;line-height:1.8">
+My name is Jatin. I am an AI & Computer Science student with a strong passion for building intelligent, scalable and secure digital systems. I come from Haryana and continuously focus on mastering advanced technologies that shape the future.
+
+I specialize in Artificial Intelligence, Machine Learning, Cyber Security, System Design, Frontend Development and Backend Engineering. From designing intuitive user interfaces to building powerful backend architectures, I create complete end‑to‑end solutions that are optimized, production‑ready and highly secure.
+
+I enjoy solving complex real‑world problems using logic, mathematics and clean architecture principles. My goal is to engineer AI‑driven systems and secure infrastructures that are not only high‑performance but also scalable and future‑proof.
+
+From idea to deployment — I build everything with precision, performance and professionalism.
+</p>
+</div>
+</section>
+
+<section id="skills">
+<h2 style="margin-bottom:15px">Skills</h2>
+<div class="skills-grid">
+<div class="skill-card">Frontend Development</div>
+<div class="skill-card">Backend Development</div>
+<div class="skill-card">Machine Learning</div>
+<div class="skill-card">Cyber Security</div>
+<div class="skill-card">System Design</div>
+<div class="skill-card">Three.js</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="card-3d">
+<h2>Contact</h2>
+<p><a href="https://www.linkedin.com/in/jatin0007" target="_blank" style="color:#38bdf8;text-decoration:none">Visit LinkedIn</a></p>
+</div>
+</section>
+
+<footer>© 2026 Jatin</footer>
+
+<script>
+function toggleMenu(){document.getElementById('navMenu').classList.toggle('active')}
+
+/* MATRIX */
+const matrixCanvas=document.getElementById('matrixCanvas');
+const mctx=matrixCanvas.getContext('2d');
+matrixCanvas.width=window.innerWidth;
+matrixCanvas.height=window.innerHeight;
+const letters="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789{}[]()<>/=+-*#@$%^&|";
+const fontSize=14;
+const columns=matrixCanvas.width/fontSize;
+const drops=Array(Math.floor(columns)).fill(1);
+function drawMatrix(){
+
+mctx.fillStyle="rgba(0,0,0,0.15)"; // darker fade for trail
+mctx.fillRect(0,0,matrixCanvas.width,matrixCanvas.height);
+
+mctx.globalAlpha = 0.25; // 25% visibility
+mctx.fillStyle="#00ff88";
+mctx.font="14px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+    let codeLine="";
+    const codeSamples=[
+        "const AI = buildSecureSystem();",
+        "function trainModel(data){return optimize(data)}",
+        "if(authenticated){grantAccess();}",
+        "let neuralNet = new DeepLearning();",
+        "encrypt(data, publicKey);",
+        "while(true){improve();}",
+        "class IntelligentAgent extends System{}",
+        "deployToProduction();"
+    ];
+
+    codeLine = codeSamples[Math.floor(Math.random()*codeSamples.length)];
+
+    mctx.fillText(codeLine,i*fontSize,drops[i]*fontSize);
+
+    if(drops[i]*fontSize>matrixCanvas.height && Math.random()>0.97){
+        drops[i]=0;
+    }
+    drops[i]++;
+}
+
+mctx.globalAlpha = 1;
+}
+function matrixLoop(){
+drawMatrix();
+requestAnimationFrame(matrixLoop);
+}
+matrixLoop();
+
+window.addEventListener('resize',()=>{
+matrixCanvas.width=window.innerWidth;
+matrixCanvas.height=window.innerHeight;
+});
+
+/* SMOOTHER 3D OBJECT */
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(60,1,0.1,1000);
+const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true});
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.setPixelRatio(window.devicePixelRatio);
+const container=document.getElementById('canvas-container');
+container.appendChild(renderer.domElement);
+function resize(){const w=container.clientWidth;const h=container.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix()}window.addEventListener('resize',resize);resize();
+camera.position.z=30;
+
+// Lighting
+const light=new THREE.PointLight(0xffffff,1.5);
+light.position.set(20,20,20);
+scene.add(light);
+
+// Ambient Light
+const ambient = new THREE.AmbientLight(0xffffff,0.4);
+scene.add(ambient);
+
+// Ground
+const groundGeometry = new THREE.PlaneGeometry(200,20);
+const groundMaterial = new THREE.MeshStandardMaterial({color:0x0a0f1f});
+const ground = new THREE.Mesh(groundGeometry,groundMaterial);
+ground.rotation.x = -Math.PI/2;
+ground.position.y = -4;
+ground.receiveShadow = true;
+scene.add(ground);
+
+light.castShadow = true;
+light.shadow.mapSize.width = 2048;
+light.shadow.mapSize.height = 2048;
+
+// Cyclist Group
+const cyclist=new THREE.Group();
+scene.add(cyclist);
+
+// Wheels
+const wheelGeometry=new THREE.TorusGeometry(2,0.4,16,50);
+const wheelMaterial=new THREE.MeshStandardMaterial({color:0x222222});
+
+const wheel1=new THREE.Mesh(wheelGeometry,wheelMaterial);
+wheel1.position.set(-4,-2,0);
+wheel1.castShadow = true;
+cyclist.add(wheel1);
+
+const wheel2=new THREE.Mesh(wheelGeometry,wheelMaterial);
+wheel2.position.set(4,-2,0);
+wheel2.castShadow = true;
+cyclist.add(wheel2);
+
+// Bike Frame
+const frameGeometry=new THREE.BoxGeometry(6,0.3,0.3);
+const frameMaterial=new THREE.MeshStandardMaterial({color:0x38bdf8});
+const frame=new THREE.Mesh(frameGeometry,frameMaterial);
+frame.position.set(0,-1,0);
+cyclist.add(frame);
+
+// Handle Bar
+const handle=new THREE.Mesh(new THREE.BoxGeometry(2,0.2,0.2),new THREE.MeshStandardMaterial({color:0xffffff}));
+handle.position.set(3.5,0.5,0);
+cyclist.add(handle);
+
+// Seat
+const seat=new THREE.Mesh(new THREE.BoxGeometry(1,0.3,1),new THREE.MeshStandardMaterial({color:0x111111}));
+seat.position.set(-1.5,0.5,0);
+cyclist.add(seat);
+
+// Pedal crank
+const crank=new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5),new THREE.MeshStandardMaterial({color:0x888888}));
+crank.position.set(0,-1.5,0);
+cyclist.add(crank);
+
+// Chain line
+const chainMaterial = new THREE.LineBasicMaterial({color:0xaaaaaa});
+const chainPoints = [];
+chainPoints.push(new THREE.Vector3(-4,-2,0));
+chainPoints.push(new THREE.Vector3(0,-1.5,0));
+chainPoints.push(new THREE.Vector3(4,-2,0));
+const chainGeometry = new THREE.BufferGeometry().setFromPoints(chainPoints);
+const chain = new THREE.Line(chainGeometry, chainMaterial);
+cyclist.add(chain);
+
+// Add slight wheel depth
+wheel1.rotation.x = Math.PI/2;
+wheel2.rotation.x = Math.PI/2;
+
+// Body
+const body=new THREE.Mesh(new THREE.BoxGeometry(1.2,3,1),new THREE.MeshStandardMaterial({color:0xffffff}));
+body.position.set(0,2,0);
+body.castShadow = true;
+cyclist.add(body);
+
+// Head
+const head=new THREE.Mesh(new THREE.SphereGeometry(0.8,32,32),new THREE.MeshStandardMaterial({color:0xffcc99}));
+head.position.set(0,4,0);
+head.castShadow = true;
+cyclist.add(head);
+
+// Arms
+const armL=new THREE.Mesh(new THREE.BoxGeometry(0.4,2,0.4),new THREE.MeshStandardMaterial({color:0xffffff}));
+armL.position.set(-1.2,2.5,0);
+armL.castShadow = true;
+cyclist.add(armL);
+
+const armR=new THREE.Mesh(new THREE.BoxGeometry(0.4,2,0.4),new THREE.MeshStandardMaterial({color:0xffffff}));
+armR.position.set(1.2,2.5,0);
+armR.castShadow = true;
+cyclist.add(armR);
+
+// Legs
+const legL=new THREE.Mesh(new THREE.BoxGeometry(0.5,2.5,0.5),new THREE.MeshStandardMaterial({color:0x555555}));
+legL.position.set(-0.5,0.5,0);
+legL.castShadow = true;
+cyclist.add(legL);
+
+const legR=new THREE.Mesh(new THREE.BoxGeometry(0.5,2.5,0.5),new THREE.MeshStandardMaterial({color:0x555555}));
+legR.position.set(0.5,0.5,0);
+legR.castShadow = true;
+cyclist.add(legR);
+
+cyclist.position.x = -30;
+let direction = 1;
+
+function animate(){
+requestAnimationFrame(animate);
+
+// Smooth cinematic camera float
+camera.position.y = Math.sin(Date.now()*0.0005)*1.5;
+camera.position.x = Math.sin(Date.now()*0.0003)*2;
+
+// Smooth forward movement
+cyclist.position.x += 0.18 * direction;
+
+// Advanced vertical suspension bounce
+cyclist.position.y = -1 + Math.sin(Date.now()*0.006)*0.4;
+
+// Slight tilt while moving
+cyclist.rotation.z = Math.sin(Date.now()*0.003)*0.08;
+
+// Head slight motion for realism
+head.rotation.y = Math.sin(Date.now()*0.002)*0.3;
+
+// Rotate crank + wheels synced
+crank.rotation.z += 0.35 * direction;
+wheel1.rotation.z += 0.35 * direction;
+wheel2.rotation.z += 0.35 * direction;
+
+// Realistic pedaling sync
+let pedal = Math.sin(Date.now()*0.012);
+legL.rotation.x = pedal * 1.4;
+legR.rotation.x = -pedal * 1.4;
+armL.rotation.x = -pedal * 1.0;
+armR.rotation.x = pedal * 1.0;
+
+// Reverse direction at edges
+if(cyclist.position.x > 35){
+    direction = -1;
+    cyclist.rotation.y = Math.PI; // flip
+}
+
+if(cyclist.position.x < -35){
+    direction = 1;
+    cyclist.rotation.y = 0;
+}
+
+renderer.render(scene,camera);
+}
+animate();
+</script>
+
+</body>
+</html>
