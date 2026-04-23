@@ -1,285 +1,298 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>German A1 Full Test</title>
+<title>German with Jatin</title>
 
 <style>
-body{
-  font-family:Arial;
-  background:linear-gradient(135deg,#1d2b64,#f8cdda);
-  color:white;
-  margin:0;
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg,#1e3c72,#2a5298);
+  color: white;
+  margin: 0;
 }
 
-.container{
-  max-width:900px;
-  margin:auto;
-  padding:20px;
-  animation:fade 1s;
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
 }
 
-.section{
-  background:rgba(0,0,0,0.4);
-  padding:15px;
-  margin:15px 0;
-  border-radius:10px;
-  transition:0.3s;
+.section {
+  background: rgba(255,255,255,0.1);
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 10px;
+  animation: fadeIn 0.5s ease;
 }
 
-.section:hover{transform:scale(1.02)}
-
-input,textarea{
-  padding:6px;
-  margin:5px;
-  border-radius:5px;
-  border:none;
+input, textarea {
+  width: 90%;
+  padding: 5px;
+  margin: 5px 0;
+  border-radius: 5px;
+  border: none;
 }
 
-.correct{background:#4caf50;}
-.wrong{background:#f44336;}
-
-.timer{
-  text-align:center;
-  font-size:22px;
-  margin-bottom:10px;
+button {
+  padding: 10px;
+  background: orange;
+  border: none;
+  color: white;
+  cursor: pointer;
 }
 
-button{
-  padding:10px 20px;
-  background:#ff9800;
-  border:none;
-  color:white;
-  border-radius:5px;
-  cursor:pointer;
+.timer {
+  text-align: center;
+  font-size: 20px;
 }
 
-@keyframes fade{
-  from{opacity:0}
-  to{opacity:1}
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(10px);}
+  to {opacity:1; transform: translateY(0);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container" id="main">
-<h1>📝 German A1 Full Test</h1>
-<div class="timer" id="timer">30:00</div>
+<div class="container">
 
-<!-- SECTION 1 -->
+<h1>German with Jatin</h1>
+
+<div>
+Name: <input id="name"><br>
+Batch Time: <input id="batch"><br>
+</div>
 <div class="section">
-<h2>Section 1</h2>
-
-1. I live in Delhi <input data-ans="ich wohne in delhi"><br>
-2. She drinks water <input data-ans="sie trinkt wasser"><br>
-3. We go to school <input data-ans="wir gehen zur schule"><br>
-4. He eats bread <input data-ans="er isst brot"><br>
-5. They learn German <input data-ans="sie lernen deutsch"><br>
-6. I have a book <input data-ans="ich habe ein buch"><br>
-7. You are tired <input data-ans="du bist müde"><br>
-8. The child plays <input data-ans="das kind spielt"><br>
-9. We work today <input data-ans="wir arbeiten heute"><br>
-10. She writes a letter <input data-ans="sie schreibt einen brief"><br>
-
-___ Mann <input data-ans="der"><br>
-___ Frau <input data-ans="die"><br>
-___ Kind <input data-ans="das"><br>
-___ Auto <input data-ans="das"><br>
-___ Lehrer <input data-ans="der"><br>
+<h2>Instructions</h2>
+<p>• Total Time: 70 Minutes</p>
+<p>• Fill all answers carefully.</p>
+<p>• Do not switch tabs or minimize (test will lock).</p>
+<p>• Answers are auto-checked (case and small mistakes ignored).</p>
+<p>• Sections include:</p>
+<p>1. Vocabulary & Articles</p>
+<p>2. Conjugation</p>
+<p>3. Modal Verbs</p>
+<p>4. Prepositions</p>
+<p>5. Conjunctions</p>
+<p>6. Imperative</p>
+<p>7. Tenses (Perfekt)</p>
+<p>8. Sentence Formation</p>
+<p>9. Writing (last question)</p>
+<p>• Enter your Name and Batch before submitting.</p>
 </div>
 
-<!-- SECTION 2 -->
-<div class="section">
-<h2>Section 2</h2>
+<div class="timer" id="timer">70:00</div>
 
-Ich ___ (gehen) nach Hause <input data-ans="gehe"><br>
-Du ___ (lernen) Deutsch <input data-ans="lernst"><br>
-Er ___ (machen) Hausaufgaben <input data-ans="macht"><br>
-Wir ___ (trinken) Tee <input data-ans="trinken"><br>
-Sie ___ (arbeiten) heute <input data-ans="arbeitet"><br>
-
-Ich ___ (haben) ein Auto <input data-ans="habe"><br>
-Du ___ (sein) müde <input data-ans="bist"><br>
-Er ___ (kommen) morgen <input data-ans="kommt"><br>
-Wir ___ (spielen) Fußball <input data-ans="spielen"><br>
-Sie ___ (lesen) ein Buch <input data-ans="liest"><br>
-</div>
-
-<!-- SECTION 3 -->
-<div class="section">
-<h2>Section 3</h2>
-
-Ich ___ Deutsch sprechen <input data-ans="kann"><br>
-Du ___ heute arbeiten <input data-ans="musst"><br>
-Er ___ ins Kino gehen <input data-ans="will"><br>
-Wir ___ Hausaufgaben machen <input data-ans="müssen"><br>
-Sie ___ hier nicht rauchen <input data-ans="dürfen"><br>
-
-Ich ___ Pizza essen <input data-ans="möchte"><br>
-Du ___ mir helfen <input data-ans="sollst"><br>
-Er ___ früher schlafen <input data-ans="soll"><br>
-Wir ___ das lernen <input data-ans="wollen"><br>
-Sie ___ nach Berlin fahren <input data-ans="will"><br>
-</div>
-
-<!-- SECTION 4 -->
-<div class="section">
-<h2>Section 4</h2>
-
-Ich gehe ___ Hause <input data-ans="nach"><br>
-Er fährt ___ Berlin <input data-ans="nach"><br>
-Wir kommen ___ der Schule <input data-ans="von"><br>
-Ich spreche ___ dir <input data-ans="mit"><br>
-Sie geht ___ dem Arzt <input data-ans="zu"><br>
-
-Das Buch ist ___ dem Tisch <input data-ans="auf"><br>
-Ich wohne ___ Deutschland <input data-ans="in"><br>
-Wir fahren ___ dem Bus <input data-ans="mit"><br>
-Er kommt ___ mir <input data-ans="zu"><br>
-Ich gehe ___ Kino <input data-ans="ins"><br>
-</div>
-
-<!-- SECTION 5 -->
-<div class="section">
-<h2>Section 5</h2>
-
-Ich komme ___ ich bin krank <input data-ans="denn"><br>
-Er ist müde ___ er arbeitet viel <input data-ans="denn"><br>
-Ich trinke Tee ___ Kaffee <input data-ans="und"><br>
-Sie ist nicht hier ___ dort <input data-ans="sondern"><br>
-Wir gehen ins Kino ___ bleiben zu Hause <input data-ans="oder"><br>
-
-Ich lerne Deutsch ___ Englisch <input data-ans="und"><br>
-Er kommt ___ er hat Zeit <input data-ans="denn"><br>
-Ich möchte Wasser ___ keinen Saft <input data-ans="aber"><br>
-Sie arbeitet viel ___ verdient wenig <input data-ans="aber"><br>
-Kommst du heute ___ morgen <input data-ans="oder"><br>
-</div>
-
-<!-- SECTION 6 -->
-<div class="section">
-<h2>Section 6 Imperative</h2>
-
-kommen <input data-ans="komm kommt kommen sie"><br>
-essen <input data-ans="iss esst essen sie"><br>
-trinken <input data-ans="trink trinkt trinken sie"><br>
-lernen <input data-ans="lern lernt lernen sie"><br>
-schreiben <input data-ans="schreib schreibt schreiben sie"><br>
-lesen <input data-ans="lies lest lesen sie"><br>
-arbeiten <input data-ans="arbeite arbeitet arbeiten sie"><br>
-sprechen <input data-ans="sprich sprecht sprechen sie"><br>
-machen <input data-ans="mach macht machen sie"><br>
-helfen <input data-ans="hilf helft helfen sie"><br>
-</div>
-
-<!-- SECTION 7 -->
-<div class="section">
-<h2>Section 7 Perfekt</h2>
-
-Ich gehe nach Hause <input data-ans="bin gegangen"><br>
-Er spielt Fußball <input data-ans="hat gespielt"><br>
-Wir lernen Deutsch <input data-ans="haben gelernt"><br>
-Sie kauft ein Buch <input data-ans="hat gekauft"><br>
-Ich mache Hausaufgaben <input data-ans="habe gemacht"><br>
-
-Du trinkst Wasser <input data-ans="hast getrunken"><br>
-Er kommt heute <input data-ans="ist gekommen"><br>
-Wir arbeiten viel <input data-ans="haben gearbeitet"><br>
-Sie schreibt einen Brief <input data-ans="hat geschrieben"><br>
-Ich esse Brot <input data-ans="habe gegessen"><br>
-</div>
-
-<!-- SECTION 8 -->
-<div class="section">
-<h2>Section 8 Sentence</h2>
-
-ich / gehen / heute / Schule <input data-ans="ich gehe heute zur schule"><br>
-er / können / Deutsch / sprechen <input data-ans="er kann deutsch sprechen"><br>
-wir / müssen / arbeiten <input data-ans="wir müssen arbeiten"><br>
-sie / trinken / Kaffee <input data-ans="sie trinkt kaffee"><br>
-ich / wollen / schlafen <input data-ans="ich will schlafen"><br>
-
-du / kommen / morgen <input data-ans="du kommst morgen"><br>
-er / lernen / viel <input data-ans="er lernt viel"><br>
-wir / spielen / Fußball <input data-ans="wir spielen fußball"><br>
-sie / schreiben / Brief <input data-ans="sie schreibt einen brief"><br>
-ich / essen / Pizza <input data-ans="ich esse pizza"><br>
-</div>
-
-<!-- WRITING -->
-<div class="section">
-<h2>Writing</h2>
-<textarea rows="6" style="width:100%"></textarea>
-</div>
+<div id="quiz"></div>
 
 <button onclick="submitTest()">Submit</button>
-<h2 id="score"></h2>
 
 </div>
 
 <script>
-// LOCK
-if(localStorage.getItem("done")){
- document.body.innerHTML="<h1 style='text-align:center'>Test Locked ❌</h1>";
-}
 
 // TIMER
-let time=30*60;
-let t=document.getElementById("timer");
+let time = 70 * 60;
+let locked = false;
 
-let i=setInterval(()=>{
- let m=Math.floor(time/60);
- let s=time%60;
- t.innerHTML=`${m}:${s<10?"0":""}${s}`;
- time--;
-
- if(time<0){
-  clearInterval(i);
-  end();
- }
+let t = setInterval(()=>{
+  if(time <= 0){
+    clearInterval(t);
+    lockTest();
+    return;
+  }
+  let m = Math.floor(time/60);
+  let s = time%60;
+  document.getElementById("timer").innerHTML = m+":"+(s<10?"0":"")+s;
+  time--;
 },1000);
 
-// TAB SWITCH
+// TAB SWITCH DETECT
 document.addEventListener("visibilitychange",()=>{
- if(document.hidden) end();
+  if(document.hidden){
+    lockTest();
+  }
 });
 
-function end(){
- localStorage.setItem("done","1");
- document.body.innerHTML="<h1 style='text-align:center'>Test Closed ❌</h1>";
+function lockTest(){
+  locked = true;
+  document.body.innerHTML = "<h1 style='text-align:center'>Test Locked ❌</h1>";
 }
 
-// CHECK
+// QUESTIONS + ANSWERS
+const data = [
+
+// Section 1
+["I live in Delhi","ich wohne in delhi"],
+["She drinks water","sie trinkt wasser"],
+["We go to school","wir gehen zur schule"],
+["He eats bread","er isst brot"],
+["They learn German","sie lernen deutsch"],
+["I have a book","ich habe ein buch"],
+["You (informal) are tired","du bist müde"],
+["The child plays","das kind spielt"],
+["We work today","wir arbeiten heute"],
+["She writes a letter","sie schreibt einen brief"],
+
+// Articles
+["___ Mann","der mann"],
+["___ Frau","die frau"],
+["___ Kind","das kind"],
+["___ Auto","das auto"],
+["___ Lehrer","der lehrer"],
+
+// Conjugation fill
+["Ich ___ (gehen) nach Hause","gehe"],
+["Du ___ (lernen) Deutsch","lernst"],
+["Er ___ (machen) Hausaufgaben","macht"],
+["Wir ___ (trinken) Tee","trinken"],
+["Sie ___ (arbeiten) heute","arbeitet"],
+["Ich ___ (haben) ein Auto","habe"],
+["Du ___ (sein) müde","bist"],
+["Er ___ (kommen) morgen","kommt"],
+["Wir ___ (spielen) Fußball","spielen"],
+["Sie ___ (lesen) ein Buch","liest"],
+
+// Modal verbs
+["Ich ___ Deutsch sprechen","kann"],
+["Du ___ heute arbeiten","musst"],
+["Er ___ ins Kino gehen","will"],
+["Wir ___ Hausaufgaben machen","müssen"],
+["Sie ___ hier nicht rauchen","dürfen"],
+["Ich ___ Pizza essen","möchte"],
+["Du ___ mir helfen","sollst"],
+["Er ___ früher schlafen","soll"],
+["Wir ___ das lernen","wollen"],
+["Sie ___ nach Berlin fahren","will"],
+
+// Prepositions
+["Ich gehe ___ Hause","nach"],
+["Er fährt ___ Berlin","nach"],
+["Wir kommen ___ der Schule","von"],
+["Ich spreche ___ dir","mit"],
+["Sie geht ___ dem Arzt","zu"],
+["Das Buch ist ___ dem Tisch","auf"],
+["Ich wohne ___ Deutschland","in"],
+["Wir fahren ___ dem Bus","mit"],
+["Er kommt ___ mir","zu"],
+["Ich gehe ___ Kino","ins"],
+
+// Akkusativ / Dativ
+["Ich sehe ___ Mann","den mann"],
+["Ich gebe ___ Frau das Buch","der frau"],
+["Er hilft ___ Kind","dem kind"],
+["Wir kaufen ___ Auto","ein auto"],
+["Sie spricht mit ___ Lehrer","dem lehrer"],
+
+// Conjunctions
+["Ich komme, ___ ich bin krank","denn"],
+["Er ist müde, ___ er arbeitet viel","denn"],
+["Ich trinke Tee ___ Kaffee","und"],
+["Sie ist nicht hier, ___ dort","sondern"],
+["Wir gehen ins Kino ___ bleiben zu Hause","oder"],
+["Ich lerne Deutsch ___ Englisch","und"],
+["Er kommt, ___ er hat Zeit","denn"],
+["Ich möchte Wasser, ___ keinen Saft","aber"],
+["Sie arbeitet viel, ___ verdient wenig","aber"],
+["Kommst du heute ___ morgen","oder"],
+
+// Imperative
+["kommen","komm"],
+["essen","iss"],
+["trinken","trink"],
+["lernen","lern"],
+["schreiben","schreib"],
+["lesen","lies"],
+["arbeiten","arbeite"],
+["sprechen","sprich"],
+["machen","mach"],
+["helfen","hilf"],
+
+// Perfekt
+["Ich gehe nach Hause","bin nach hause gegangen"],
+["Er spielt Fußball","hat fußball gespielt"],
+["Wir lernen Deutsch","haben deutsch gelernt"],
+["Sie kauft ein Buch","hat ein buch gekauft"],
+["Ich mache Hausaufgaben","habe hausaufgaben gemacht"],
+["Du trinkst Wasser","hast wasser getrunken"],
+["Er kommt heute","ist heute gekommen"],
+["Wir arbeiten viel","haben viel gearbeitet"],
+["Sie schreibt einen Brief","hat einen brief geschrieben"],
+["Ich esse Brot","habe brot gegessen"],
+
+// Auxiliary
+["Ich ___ gegangen","bin"],
+["Er ___ gespielt","hat"],
+["Wir ___ gefahren","sind"],
+["Sie ___ gelernt","hat"],
+["Ich ___ gekommen","bin"],
+
+// Sentence formation
+["ich / gehen / heute / Schule","ich gehe heute zur schule"],
+["er / können / Deutsch / sprechen","er kann deutsch sprechen"],
+["wir / müssen / arbeiten","wir müssen arbeiten"],
+["sie / trinken / Kaffee","sie trinkt kaffee"],
+["ich / wollen / schlafen","ich will schlafen"],
+["du / kommen / morgen","du kommst morgen"],
+["er / lernen / viel","er lernt viel"],
+["wir / spielen / Fußball","wir spielen fußball"],
+["sie / schreiben / Brief","sie schreibt einen brief"],
+["ich / essen / Pizza","ich esse pizza"]
+
+];
+
+// RENDER QUESTIONS
+let quiz = document.getElementById("quiz");
+
+data.forEach((q,i)=>{
+  let div = document.createElement("div");
+  div.className="section";
+  div.innerHTML = `${i+1}. ${q[0]}<br><input id="q${i}">`;
+  quiz.appendChild(div);
+});
+
+window.onbeforeunload = function(){ return "Test in progress"; };
+
+// CHECK FUNCTION
 function normalize(str){
- return str.toLowerCase().replace(/[.,!]/g,"").trim();
+  return str
+    .toLowerCase()
+    .normalize("NFD").replace(/\p{Diacritic}/gu, "")
+    .replace(/[.,]/g,"")
+    .trim();
 }
 
 function submitTest(){
- let inputs=document.querySelectorAll("input");
- let score=0;
+  if(locked) return;
 
- inputs.forEach(inp=>{
-  let ans=inp.dataset.ans.split(" ");
-  let user=normalize(inp.value);
+  let name = document.getElementById("name").value;
+  let batch = document.getElementById("batch").value;
 
-  let correct=false;
+  if(!name || !batch){
+    alert("Enter Name & Batch");
+    return;
+  }
 
-  ans.forEach(a=>{
-    if(user.includes(a)) correct=true;
+  let score = 0;
+
+  data.forEach((q,i)=>{
+    let user = document.getElementById("q"+i).value;
+    if(normalize(user) === normalize(q[1])){
+      score++;
+    }
   });
 
-  if(correct){
-    inp.classList.add("correct");
-    score++;
-  }else{
-    inp.classList.add("wrong");
-  }
- });
+  let total = data.length;
 
- document.getElementById("score").innerText="Score: "+score+" / "+inputs.length;
- localStorage.setItem("done","1");
+  alert(`Score: ${score}/${total}`);
+
+  // EMAIL AUTO OPEN
+  let body = encodeURIComponent(`Name: ${name}\nBatch: ${batch}\nScore: ${score}/${total}`);
+  window.location.href = `mailto:jatiaanbaha@gmail.com?subject=German Test&body=${body}`;
 }
+
 </script>
 
 </body>
