@@ -2,256 +2,283 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>German A1 Test</title>
+<title>German A1 Full Test</title>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  margin: 0;
-  padding: 0;
+body{
+  font-family:Arial;
+  background:linear-gradient(135deg,#1d2b64,#f8cdda);
+  color:white;
+  margin:0;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-  animation: fadeIn 1s ease-in-out;
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+  animation:fade 1s;
 }
 
-h1 {
-  text-align: center;
+.section{
+  background:rgba(0,0,0,0.4);
+  padding:15px;
+  margin:15px 0;
+  border-radius:10px;
+  transition:0.3s;
 }
 
-.section {
-  background: rgba(255,255,255,0.1);
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 10px;
-  transition: transform 0.3s;
+.section:hover{transform:scale(1.02)}
+
+input,textarea{
+  padding:6px;
+  margin:5px;
+  border-radius:5px;
+  border:none;
 }
 
-.section:hover {
-  transform: scale(1.02);
+.correct{background:#4caf50;}
+.wrong{background:#f44336;}
+
+.timer{
+  text-align:center;
+  font-size:22px;
+  margin-bottom:10px;
 }
 
-input {
-  margin: 5px;
-  padding: 5px;
-  border-radius: 5px;
-  border: none;
+button{
+  padding:10px 20px;
+  background:#ff9800;
+  border:none;
+  color:white;
+  border-radius:5px;
+  cursor:pointer;
 }
 
-.timer {
-  text-align: center;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-button {
-  padding: 10px 20px;
-  border: none;
-  background: #ff9800;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #e68900;
-}
-
-@keyframes fadeIn {
-  from {opacity:0;}
-  to {opacity:1;}
+@keyframes fade{
+  from{opacity:0}
+  to{opacity:1}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-<h1>📝 German A1 Test</h1>
-<div class="timer" id="timer">⏱ 60:00</div>
+<div class="container" id="main">
+<h1>📝 German A1 Full Test</h1>
+<div class="timer" id="timer">30:00</div>
 
 <!-- SECTION 1 -->
 <div class="section">
-<h2>Section 1: Vocabulary</h2>
-<p>Translate into German:</p>
+<h2>Section 1</h2>
 
-1. I live in Delhi <input><br>
-2. She drinks water <input><br>
-3. We go to school <input><br>
-4. He eats bread <input><br>
-5. They learn German <input><br>
-6. I have a book <input><br>
-7. You are tired <input><br>
-8. The child plays <input><br>
-9. We work today <input><br>
-10. She writes a letter <input><br>
+1. I live in Delhi <input data-ans="ich wohne in delhi"><br>
+2. She drinks water <input data-ans="sie trinkt wasser"><br>
+3. We go to school <input data-ans="wir gehen zur schule"><br>
+4. He eats bread <input data-ans="er isst brot"><br>
+5. They learn German <input data-ans="sie lernen deutsch"><br>
+6. I have a book <input data-ans="ich habe ein buch"><br>
+7. You are tired <input data-ans="du bist müde"><br>
+8. The child plays <input data-ans="das kind spielt"><br>
+9. We work today <input data-ans="wir arbeiten heute"><br>
+10. She writes a letter <input data-ans="sie schreibt einen brief"><br>
 
-<h3>Articles</h3>
-___ Mann <input><br>
-___ Frau <input><br>
-___ Kind <input><br>
-___ Auto <input><br>
-___ Lehrer <input><br>
+___ Mann <input data-ans="der"><br>
+___ Frau <input data-ans="die"><br>
+___ Kind <input data-ans="das"><br>
+___ Auto <input data-ans="das"><br>
+___ Lehrer <input data-ans="der"><br>
 </div>
 
 <!-- SECTION 2 -->
 <div class="section">
-<h2>Section 2: Conjugation</h2>
+<h2>Section 2</h2>
 
-Ich ___ (gehen) nach Hause <input><br>
-Du ___ (lernen) Deutsch <input><br>
-Er ___ (machen) Hausaufgaben <input><br>
-Wir ___ (trinken) Tee <input><br>
-Sie ___ (arbeiten) heute <input><br>
+Ich ___ (gehen) nach Hause <input data-ans="gehe"><br>
+Du ___ (lernen) Deutsch <input data-ans="lernst"><br>
+Er ___ (machen) Hausaufgaben <input data-ans="macht"><br>
+Wir ___ (trinken) Tee <input data-ans="trinken"><br>
+Sie ___ (arbeiten) heute <input data-ans="arbeitet"><br>
 
-Ich ___ (haben) ein Auto <input><br>
-Du ___ (sein) müde <input><br>
-Er ___ (kommen) morgen <input><br>
-Wir ___ (spielen) Fußball <input><br>
-Sie ___ (lesen) ein Buch <input><br>
+Ich ___ (haben) ein Auto <input data-ans="habe"><br>
+Du ___ (sein) müde <input data-ans="bist"><br>
+Er ___ (kommen) morgen <input data-ans="kommt"><br>
+Wir ___ (spielen) Fußball <input data-ans="spielen"><br>
+Sie ___ (lesen) ein Buch <input data-ans="liest"><br>
 </div>
 
 <!-- SECTION 3 -->
 <div class="section">
-<h2>Section 3: Modal Verbs</h2>
+<h2>Section 3</h2>
 
-Ich ___ Deutsch sprechen <input><br>
-Du ___ heute arbeiten <input><br>
-Er ___ ins Kino gehen <input><br>
-Wir ___ Hausaufgaben machen <input><br>
-Sie ___ hier nicht rauchen <input><br>
+Ich ___ Deutsch sprechen <input data-ans="kann"><br>
+Du ___ heute arbeiten <input data-ans="musst"><br>
+Er ___ ins Kino gehen <input data-ans="will"><br>
+Wir ___ Hausaufgaben machen <input data-ans="müssen"><br>
+Sie ___ hier nicht rauchen <input data-ans="dürfen"><br>
 
-Ich ___ Pizza essen <input><br>
-Du ___ mir helfen <input><br>
-Er ___ früher schlafen <input><br>
-Wir ___ das lernen <input><br>
-Sie ___ nach Berlin fahren <input><br>
+Ich ___ Pizza essen <input data-ans="möchte"><br>
+Du ___ mir helfen <input data-ans="sollst"><br>
+Er ___ früher schlafen <input data-ans="soll"><br>
+Wir ___ das lernen <input data-ans="wollen"><br>
+Sie ___ nach Berlin fahren <input data-ans="will"><br>
 </div>
 
 <!-- SECTION 4 -->
 <div class="section">
-<h2>Section 4: Prepositions</h2>
+<h2>Section 4</h2>
 
-Ich gehe ___ Hause <input><br>
-Er fährt ___ Berlin <input><br>
-Wir kommen ___ der Schule <input><br>
-Ich spreche ___ dir <input><br>
-Sie geht ___ dem Arzt <input><br>
+Ich gehe ___ Hause <input data-ans="nach"><br>
+Er fährt ___ Berlin <input data-ans="nach"><br>
+Wir kommen ___ der Schule <input data-ans="von"><br>
+Ich spreche ___ dir <input data-ans="mit"><br>
+Sie geht ___ dem Arzt <input data-ans="zu"><br>
 
-Das Buch ist ___ dem Tisch <input><br>
-Ich wohne ___ Deutschland <input><br>
-Wir fahren ___ dem Bus <input><br>
-Er kommt ___ mir <input><br>
-Ich gehe ___ Kino <input><br>
+Das Buch ist ___ dem Tisch <input data-ans="auf"><br>
+Ich wohne ___ Deutschland <input data-ans="in"><br>
+Wir fahren ___ dem Bus <input data-ans="mit"><br>
+Er kommt ___ mir <input data-ans="zu"><br>
+Ich gehe ___ Kino <input data-ans="ins"><br>
 </div>
 
 <!-- SECTION 5 -->
 <div class="section">
-<h2>Section 5: Conjunctions</h2>
+<h2>Section 5</h2>
 
-Ich komme, ___ ich bin krank <input><br>
-Er ist müde, ___ er arbeitet viel <input><br>
-Ich trinke Tee ___ Kaffee <input><br>
-Sie ist nicht hier, ___ dort <input><br>
-Wir gehen ins Kino ___ bleiben zu Hause <input><br>
+Ich komme ___ ich bin krank <input data-ans="denn"><br>
+Er ist müde ___ er arbeitet viel <input data-ans="denn"><br>
+Ich trinke Tee ___ Kaffee <input data-ans="und"><br>
+Sie ist nicht hier ___ dort <input data-ans="sondern"><br>
+Wir gehen ins Kino ___ bleiben zu Hause <input data-ans="oder"><br>
 
-Ich lerne Deutsch ___ Englisch <input><br>
-Er kommt, ___ er hat Zeit <input><br>
-Ich möchte Wasser, ___ keinen Saft <input><br>
-Sie arbeitet viel, ___ verdient wenig <input><br>
-Kommst du heute ___ morgen <input><br>
+Ich lerne Deutsch ___ Englisch <input data-ans="und"><br>
+Er kommt ___ er hat Zeit <input data-ans="denn"><br>
+Ich möchte Wasser ___ keinen Saft <input data-ans="aber"><br>
+Sie arbeitet viel ___ verdient wenig <input data-ans="aber"><br>
+Kommst du heute ___ morgen <input data-ans="oder"><br>
 </div>
 
 <!-- SECTION 6 -->
 <div class="section">
-<h2>Section 6: Imperative</h2>
+<h2>Section 6 Imperative</h2>
 
-kommen → <input><br>
-essen → <input><br>
-trinken → <input><br>
-lernen → <input><br>
-schreiben → <input><br>
-
-lesen → <input><br>
-arbeiten → <input><br>
-sprechen → <input><br>
-machen → <input><br>
-helfen → <input><br>
+kommen <input data-ans="komm kommt kommen sie"><br>
+essen <input data-ans="iss esst essen sie"><br>
+trinken <input data-ans="trink trinkt trinken sie"><br>
+lernen <input data-ans="lern lernt lernen sie"><br>
+schreiben <input data-ans="schreib schreibt schreiben sie"><br>
+lesen <input data-ans="lies lest lesen sie"><br>
+arbeiten <input data-ans="arbeite arbeitet arbeiten sie"><br>
+sprechen <input data-ans="sprich sprecht sprechen sie"><br>
+machen <input data-ans="mach macht machen sie"><br>
+helfen <input data-ans="hilf helft helfen sie"><br>
 </div>
 
 <!-- SECTION 7 -->
 <div class="section">
-<h2>Section 7: Perfekt</h2>
+<h2>Section 7 Perfekt</h2>
 
-Ich gehe nach Hause <input><br>
-Er spielt Fußball <input><br>
-Wir lernen Deutsch <input><br>
-Sie kauft ein Buch <input><br>
-Ich mache Hausaufgaben <input><br>
+Ich gehe nach Hause <input data-ans="bin gegangen"><br>
+Er spielt Fußball <input data-ans="hat gespielt"><br>
+Wir lernen Deutsch <input data-ans="haben gelernt"><br>
+Sie kauft ein Buch <input data-ans="hat gekauft"><br>
+Ich mache Hausaufgaben <input data-ans="habe gemacht"><br>
 
-Du trinkst Wasser <input><br>
-Er kommt heute <input><br>
-Wir arbeiten viel <input><br>
-Sie schreibt einen Brief <input><br>
-Ich esse Brot <input><br>
-
-<h3>Auxiliary</h3>
-Ich ___ gegangen <input><br>
-Er ___ gespielt <input><br>
-Wir ___ gefahren <input><br>
-Sie ___ gelernt <input><br>
-Ich ___ gekommen <input><br>
+Du trinkst Wasser <input data-ans="hast getrunken"><br>
+Er kommt heute <input data-ans="ist gekommen"><br>
+Wir arbeiten viel <input data-ans="haben gearbeitet"><br>
+Sie schreibt einen Brief <input data-ans="hat geschrieben"><br>
+Ich esse Brot <input data-ans="habe gegessen"><br>
 </div>
 
 <!-- SECTION 8 -->
 <div class="section">
-<h2>Section 8: Sentence Formation</h2>
+<h2>Section 8 Sentence</h2>
 
-ich / gehen / heute / Schule <input><br>
-er / können / Deutsch / sprechen <input><br>
-wir / müssen / arbeiten <input><br>
-sie / trinken / Kaffee <input><br>
-ich / wollen / schlafen <input><br>
+ich / gehen / heute / Schule <input data-ans="ich gehe heute zur schule"><br>
+er / können / Deutsch / sprechen <input data-ans="er kann deutsch sprechen"><br>
+wir / müssen / arbeiten <input data-ans="wir müssen arbeiten"><br>
+sie / trinken / Kaffee <input data-ans="sie trinkt kaffee"><br>
+ich / wollen / schlafen <input data-ans="ich will schlafen"><br>
 
-du / kommen / morgen <input><br>
-er / lernen / viel <input><br>
-wir / spielen / Fußball <input><br>
-sie / schreiben / Brief <input><br>
-ich / essen / Pizza <input><br>
+du / kommen / morgen <input data-ans="du kommst morgen"><br>
+er / lernen / viel <input data-ans="er lernt viel"><br>
+wir / spielen / Fußball <input data-ans="wir spielen fußball"><br>
+sie / schreiben / Brief <input data-ans="sie schreibt einen brief"><br>
+ich / essen / Pizza <input data-ans="ich esse pizza"><br>
 </div>
 
-<!-- SECTION 9 -->
+<!-- WRITING -->
 <div class="section">
-<h2>Section 9: Writing</h2>
-<p>Mein Alltag (8–10 sentences)</p>
-<textarea rows="6" style="width:100%;"></textarea>
+<h2>Writing</h2>
+<textarea rows="6" style="width:100%"></textarea>
 </div>
 
 <button onclick="submitTest()">Submit</button>
+<h2 id="score"></h2>
 
 </div>
 
 <script>
+// LOCK
+if(localStorage.getItem("done")){
+ document.body.innerHTML="<h1 style='text-align:center'>Test Locked ❌</h1>";
+}
+
 // TIMER
-let time = 60 * 60;
-let timer = document.getElementById("timer");
+let time=30*60;
+let t=document.getElementById("timer");
 
-setInterval(() => {
-  let minutes = Math.floor(time / 60);
-  let seconds = time % 60;
-  timer.innerHTML = `⏱ ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-  time--;
-}, 1000);
+let i=setInterval(()=>{
+ let m=Math.floor(time/60);
+ let s=time%60;
+ t.innerHTML=`${m}:${s<10?"0":""}${s}`;
+ time--;
 
-// SUBMIT
-function submitTest() {
-  alert("Test submitted! ✅");
+ if(time<0){
+  clearInterval(i);
+  end();
+ }
+},1000);
+
+// TAB SWITCH
+document.addEventListener("visibilitychange",()=>{
+ if(document.hidden) end();
+});
+
+function end(){
+ localStorage.setItem("done","1");
+ document.body.innerHTML="<h1 style='text-align:center'>Test Closed ❌</h1>";
+}
+
+// CHECK
+function normalize(str){
+ return str.toLowerCase().replace(/[.,!]/g,"").trim();
+}
+
+function submitTest(){
+ let inputs=document.querySelectorAll("input");
+ let score=0;
+
+ inputs.forEach(inp=>{
+  let ans=inp.dataset.ans.split(" ");
+  let user=normalize(inp.value);
+
+  let correct=false;
+
+  ans.forEach(a=>{
+    if(user.includes(a)) correct=true;
+  });
+
+  if(correct){
+    inp.classList.add("correct");
+    score++;
+  }else{
+    inp.classList.add("wrong");
+  }
+ });
+
+ document.getElementById("score").innerText="Score: "+score+" / "+inputs.length;
+ localStorage.setItem("done","1");
 }
 </script>
 
