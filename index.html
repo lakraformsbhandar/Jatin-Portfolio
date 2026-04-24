@@ -2,60 +2,26 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>German with Jatin</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+
 <style>
-body {
-  font-family: Arial;
-  background: linear-gradient(135deg,#1e3c72,#2a5298);
-  color: white;
-  margin: 0;
-}
-
-.container {
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
-}
-
-.section {
-  background: rgba(255,255,255,0.1);
-  padding: 15px;
-  margin: 15px 0;
-  border-radius: 10px;
-  animation: fadeIn 0.5s ease;
-}
-
-input, textarea {
-  width: 90%;
-  padding: 5px;
-  margin: 5px 0;
-  border-radius: 5px;
-  border: none;
-}
-
-button {
-  padding: 10px;
-  background: orange;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
-.timer {
-  text-align: center;
-  font-size: 20px;
-}
-
-@keyframes fadeIn {
-  from {opacity:0; transform: translateY(10px);}
-  to {opacity:1; transform: translateY(0);}
-}
+body { font-family: Arial; background: linear-gradient(135deg,#1e3c72,#2a5298); color: white; margin: 0; }
+.container { max-width: 900px; margin: auto; padding: 20px; }
+.section { background: rgba(255,255,255,0.1); padding: 15px; margin: 15px 0; border-radius: 10px; animation: fadeIn 0.5s ease; }
+input, textarea { width: 90%; padding: 5px; margin: 5px 0; border-radius: 5px; border: none; }
+button { padding: 10px; background: orange; border: none; color: white; cursor: pointer; }
+.timer { text-align: center; font-size: 20px; }
+video { width:200px; border-radius:10px; margin:10px 0; }
+@keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
 </style>
 </head>
 
 <body>
-
 <div class="container">
 
 <h1>German with Jatin</h1>
@@ -64,6 +30,7 @@ button {
 Name: <input id="name"><br>
 Batch Time: <input id="batch"><br>
 </div>
+
 <div class="section">
 <h2>Instructions</h2>
 <p>• Total Time: 70 Minutes</p>
@@ -85,6 +52,8 @@ Batch Time: <input id="batch"><br>
 
 <div class="timer" id="timer">70:00</div>
 
+<video id="video" autoplay muted playsinline></video>
+
 <div id="quiz"></div>
 
 <button onclick="submitTest()">Submit</button>
@@ -93,207 +62,311 @@ Batch Time: <input id="batch"><br>
 
 <script>
 
-// TIMER
 let time = 70 * 60;
 let locked = false;
+let warningCount = 0;
+let aiReady = false;
+let faceDetectedOnce = false;
 
+// NEW: startup protection
+let startTime = Date.now();
+let GRACE_PERIOD = 10000; // 10 seconds
+
+let videoElement = document.getElementById("video");
+let faceMesh;
+let camera;
+
+// TIMER
 let t = setInterval(()=>{
-  if(time <= 0){
-    clearInterval(t);
-    lockTest();
-    return;
-  }
+  if(time <= 0){ clearInterval(t); lockTest(); return; }
   let m = Math.floor(time/60);
   let s = time%60;
   document.getElementById("timer").innerHTML = m+":"+(s<10?"0":"")+s;
   time--;
 },1000);
 
-// TAB SWITCH DETECT
-document.addEventListener("visibilitychange",()=>{
-  if(document.hidden){
-    lockTest();
-  }
-});
-
+// SAFE LOCK FUNCTION (WITH GRACE PERIOD)
 function lockTest(){
+  if(locked) return;
+
+  // prevent instant lock on startup
+  if(Date.now() - startTime < GRACE_PERIOD) return;
+
   locked = true;
   document.body.innerHTML = "<h1 style='text-align:center'>Test Locked ❌</h1>";
 }
 
-// QUESTIONS + ANSWERS
+// TAB SWITCH LOCK (SAFE)
+document.addEventListener("visibilitychange",()=>{
+  if(Date.now() - startTime < GRACE_PERIOD) return;
+  if(document.hidden) lockTest();
+});
+
+window.addEventListener("blur", ()=>{
+  if(Date.now() - startTime < GRACE_PERIOD) return;
+  lockTest();
+});
+
+window.addEventListener("pagehide", ()=>{
+  if(Date.now() - startTime < GRACE_PERIOD) return;
+  lockTest();
+});
+
+window.addEventListener("focusout", ()=>{
+  if(Date.now() - startTime < GRACE_PERIOD) return;
+  lockTest();
+});
+
+// CAMERA + AI
+async function startCamera(){
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+    videoElement.srcObject = stream;
+
+    const FaceMeshClass = window.FaceMesh;
+    const CameraClass = window.Camera;
+
+    if(!FaceMeshClass || !CameraClass) return;
+
+    faceMesh = new FaceMeshClass({locateFile:(file)=>
+      `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`
+    });
+
+    faceMesh.setOptions({
+      maxNumFaces:1,
+      refineLandmarks:true,
+      minDetectionConfidence:0.6,
+      minTrackingConfidence:0.6
+    });
+
+    faceMesh.onResults(onResults);
+
+    camera = new CameraClass(videoElement,{onFrame:async()=>{
+      if(faceMesh) await faceMesh.send({image:videoElement});
+    },width:640,height:480});
+
+    camera.start();
+
+    setTimeout(()=>{ aiReady = true; }, 3000);
+
+  }catch(e){
+    console.log("Camera blocked",e);
+  }
+}
+
+startCamera();
+
+function onResults(results){
+  if(Date.now() - startTime < GRACE_PERIOD) return;
+  if(!aiReady) return;
+
+  if(results.multiFaceLandmarks && results.multiFaceLandmarks.length>0){
+    faceDetectedOnce = true;
+    const lm = results.multiFaceLandmarks[0];
+
+    let nose = lm[1];
+    let deviation = Math.abs(nose.x - 0.5);
+
+    if(deviation > 0.25){
+      warningCount++;
+    }
+
+  } else {
+    if(faceDetectedOnce){
+      warningCount++;
+    }
+  }
+
+  if(warningCount >= 7){
+    lockTest();
+  }
+}
+
+// QUESTIONS
 const data = [
 
-// Section 1
-["I live in Delhi","ich wohne in delhi"],
-["She drinks water","sie trinkt wasser"],
-["We go to school","wir gehen zur schule"],
-["He eats bread","er isst brot"],
-["They learn German","sie lernen deutsch"],
-["I have a book","ich habe ein buch"],
-["You (informal) are tired","du bist müde"],
-["The child plays","das kind spielt"],
-["We work today","wir arbeiten heute"],
-["She writes a letter","sie schreibt einen brief"],
+// Section 1 (8)
+["I live in Berlin","ich wohne in berlin"],
+["She eats apple","sie isst apfel"],
+["We play football","wir spielen fußball"],
+["He reads book","er liest ein buch"],
+["They drink tea","sie trinken tee"],
+["I learn German","ich lerne deutsch"],
+["You are happy","du bist glücklich"],
+["We work hard","wir arbeiten hart"],
 
-// Articles
+// Articles (5)
 ["___ Mann","der mann"],
 ["___ Frau","die frau"],
 ["___ Kind","das kind"],
+["___ Tisch","der tisch"],
 ["___ Auto","das auto"],
-["___ Lehrer","der lehrer"],
 
-// Conjugation fill
-["Ich ___ (gehen) nach Hause","gehe"],
-["Du ___ (lernen) Deutsch","lernst"],
-["Er ___ (machen) Hausaufgaben","macht"],
-["Wir ___ (trinken) Tee","trinken"],
-["Sie ___ (arbeiten) heute","arbeitet"],
-["Ich ___ (haben) ein Auto","habe"],
+// Conjugation (10)
+["Ich ___ (gehen) zur Schule","gehe"],
+["Du ___ (spielen)","spielst"],
+["Er ___ (kommen)","kommt"],
+["Wir ___ (lernen)","lernen"],
+["Sie ___ (arbeiten)","arbeitet"],
+["Ich ___ (haben) ein Buch","habe"],
 ["Du ___ (sein) müde","bist"],
-["Er ___ (kommen) morgen","kommt"],
-["Wir ___ (spielen) Fußball","spielen"],
-["Sie ___ (lesen) ein Buch","liest"],
+["Er ___ (machen)","macht"],
+["Wir ___ (trinken) Wasser","trinken"],
+["Sie ___ (lesen)","liest"],
 
-// Modal verbs
+// Modal verbs (10)
 ["Ich ___ Deutsch sprechen","kann"],
-["Du ___ heute arbeiten","musst"],
-["Er ___ ins Kino gehen","will"],
-["Wir ___ Hausaufgaben machen","müssen"],
-["Sie ___ hier nicht rauchen","dürfen"],
+["Du ___ arbeiten","musst"],
+["Er ___ gehen","will"],
+["Wir ___ lernen","müssen"],
+["Sie ___ hier bleiben","dürfen"],
 ["Ich ___ Pizza essen","möchte"],
 ["Du ___ mir helfen","sollst"],
-["Er ___ früher schlafen","soll"],
-["Wir ___ das lernen","wollen"],
-["Sie ___ nach Berlin fahren","will"],
+["Er ___ schlafen","soll"],
+["Wir ___ fahren","wollen"],
+["Sie ___ spielen","können"],
 
-// Prepositions
-["Ich gehe ___ Hause","nach"],
+// Prepositions (10)
+["Ich gehe ___ Schule","zur"],
 ["Er fährt ___ Berlin","nach"],
-["Wir kommen ___ der Schule","von"],
+["Wir kommen ___ Hause","nach"],
 ["Ich spreche ___ dir","mit"],
-["Sie geht ___ dem Arzt","zu"],
-["Das Buch ist ___ dem Tisch","auf"],
+["Sie geht ___ Arzt","zum"],
+["Das Buch liegt ___ Tisch","auf dem"],
 ["Ich wohne ___ Deutschland","in"],
-["Wir fahren ___ dem Bus","mit"],
+["Wir fahren ___ Bus","mit dem"],
 ["Er kommt ___ mir","zu"],
 ["Ich gehe ___ Kino","ins"],
 
-// Akkusativ / Dativ
+// Akkusativ / Dativ (5)
 ["Ich sehe ___ Mann","den mann"],
 ["Ich gebe ___ Frau das Buch","der frau"],
 ["Er hilft ___ Kind","dem kind"],
 ["Wir kaufen ___ Auto","ein auto"],
 ["Sie spricht mit ___ Lehrer","dem lehrer"],
 
-// Conjunctions
+// Conjunctions (10)
 ["Ich komme, ___ ich bin krank","denn"],
-["Er ist müde, ___ er arbeitet viel","denn"],
-["Ich trinke Tee ___ Kaffee","und"],
-["Sie ist nicht hier, ___ dort","sondern"],
-["Wir gehen ins Kino ___ bleiben zu Hause","oder"],
-["Ich lerne Deutsch ___ Englisch","und"],
-["Er kommt, ___ er hat Zeit","denn"],
-["Ich möchte Wasser, ___ keinen Saft","aber"],
-["Sie arbeitet viel, ___ verdient wenig","aber"],
-["Kommst du heute ___ morgen","oder"],
+["Er lernt, ___ er arbeitet","weil"],
+["Ich trinke Tee ___ Kaffee","oder"],
+["Sie ist müde, ___ sie schläft","und"],
+["Wir gehen raus ___ es regnet","obwohl"],
+["Ich bleibe zu Hause ___ ich krank bin","weil"],
+["Er spielt, ___ er Zeit hat","wenn"],
+["Ich esse Pizza, ___ ich Hunger habe","weil"],
+["Sie liest, ___ sie wartet","während"],
+["Kommst du, ___ gehst du?","oder"],
 
-// Imperative
+// Imperative (6)
 ["kommen","komm"],
 ["essen","iss"],
 ["trinken","trink"],
 ["lernen","lern"],
-["schreiben","schreib"],
-["lesen","lies"],
-["arbeiten","arbeite"],
 ["sprechen","sprich"],
 ["machen","mach"],
-["helfen","hilf"],
 
-// Perfekt
+// Perfekt (6)
 ["Ich gehe nach Hause","bin nach hause gegangen"],
 ["Er spielt Fußball","hat fußball gespielt"],
 ["Wir lernen Deutsch","haben deutsch gelernt"],
-["Sie kauft ein Buch","hat ein buch gekauft"],
+["Sie kauft Brot","hat brot gekauft"],
 ["Ich mache Hausaufgaben","habe hausaufgaben gemacht"],
-["Du trinkst Wasser","hast wasser getrunken"],
-["Er kommt heute","ist heute gekommen"],
-["Wir arbeiten viel","haben viel gearbeitet"],
-["Sie schreibt einen Brief","hat einen brief geschrieben"],
-["Ich esse Brot","habe brot gegessen"],
-
-// Auxiliary
-["Ich ___ gegangen","bin"],
-["Er ___ gespielt","hat"],
-["Wir ___ gefahren","sind"],
-["Sie ___ gelernt","hat"],
-["Ich ___ gekommen","bin"],
-
-// Sentence formation
-["ich / gehen / heute / Schule","ich gehe heute zur schule"],
-["er / können / Deutsch / sprechen","er kann deutsch sprechen"],
-["wir / müssen / arbeiten","wir müssen arbeiten"],
-["sie / trinken / Kaffee","sie trinkt kaffee"],
-["ich / wollen / schlafen","ich will schlafen"],
-["du / kommen / morgen","du kommst morgen"],
-["er / lernen / viel","er lernt viel"],
-["wir / spielen / Fußball","wir spielen fußball"],
-["sie / schreiben / Brief","sie schreibt einen brief"],
-["ich / essen / Pizza","ich esse pizza"]
+["Du kommst spät","bist spät gekommen"]
 
 ];
 
-// RENDER QUESTIONS
-let quiz = document.getElementById("quiz");
-
+let quiz=document.getElementById("quiz");
 data.forEach((q,i)=>{
-  let div = document.createElement("div");
+  let div=document.createElement("div");
   div.className="section";
   div.innerHTML = `${i+1}. ${q[0]}<br><input id="q${i}">`;
   quiz.appendChild(div);
 });
 
-window.onbeforeunload = function(){ return "Test in progress"; };
+function normalize(s){return (s||"").toLowerCase().trim();}
 
-// CHECK FUNCTION
-function normalize(str){
-  return str
-    .toLowerCase()
-    .normalize("NFD").replace(/\p{Diacritic}/gu, "")
-    .replace(/[.,]/g,"")
-    .trim();
-}
+let lastReport=null;
 
 function submitTest(){
   if(locked) return;
 
-  let name = document.getElementById("name").value;
-  let batch = document.getElementById("batch").value;
+  let name=document.getElementById("name").value;
+  let batch=document.getElementById("batch").value;
 
   if(!name || !batch){
     alert("Enter Name & Batch");
     return;
   }
 
-  let score = 0;
+  let score=0;
 
   data.forEach((q,i)=>{
-    let user = document.getElementById("q"+i).value;
-    if(normalize(user) === normalize(q[1])){
-      score++;
-    }
+    let u=normalize(document.getElementById("q"+i).value);
+    let c=normalize(q[1]);
+    if(u===c) score++;
   });
 
-  let total = data.length;
+  let total=data.length;
 
-  alert(`Score: ${score}/${total}`);
+  let report=`Name:${name}\nBatch:${batch}\nScore:${score}/${total}`;
 
-  // EMAIL AUTO OPEN
-  let body = encodeURIComponent(`Name: ${name}\nBatch: ${batch}\nScore: ${score}/${total}`);
-  window.location.href = `mailto:jatiaanbaha@gmail.com?subject=German Test&body=${body}`;
+  // SHOW SCORE ON SCREEN (FIX)
+  let resultBox=document.getElementById("resultBox");
+  if(!resultBox){
+    resultBox=document.createElement("div");
+    resultBox.id="resultBox";
+    resultBox.className="section";
+    document.querySelector(".container").appendChild(resultBox);
+  }
+  resultBox.innerHTML=`<h2>Result</h2><p>Score: ${score}/${total}</p><p>PDF downloading...</p>`;
+  console.log("Score calculated:", score, "/", total);
+
+  // PDF DOWNLOAD
+  const jsPDFCtor = window.jspdf && window.jspdf.jsPDF;
+  if(jsPDFCtor){
+    let doc = new jsPDFCtor();
+    doc.text(report, 10, 10);
+    doc.save("result.pdf");
+  }else{
+    console.log("jsPDF not loaded");
+    alert("PDF library not loaded, check internet connection.");
+  }
+
+  // EMAIL REDIRECT (RESTORED)
+  setTimeout(()=>{
+    window.location.href = `mailto:test@gmail.com?subject=German Test Result - ${name}&body=${encodeURIComponent(report)}`;
+  }, 300);
+
+  lastReport=report;
+
+  lockTest();
 }
 
-</script>
+window.addEventListener("visibilitychange", ()=>{
+  if(document.visibilityState === "visible" && lastReport){
 
+    let existing=document.getElementById("downloadAgain");
+    if(!existing){
+      let btn=document.createElement("button");
+      btn.id="downloadAgain";
+      btn.innerText="Download Result PDF Again";
+      btn.onclick=()=>{
+        const jsPDFCtor = window.jspdf && window.jspdf.jsPDF;
+        if(jsPDFCtor){
+          let doc = new jsPDFCtor();
+          doc.text(lastReport, 10, 10);
+          doc.save("result.pdf");
+        } else {
+          console.log("jsPDF not loaded");
+          alert("PDF library not loaded, check internet connection.");
+        }
+      };
+
+      document.querySelector(".container").appendChild(btn);
+    }
+  }
+});
+
+</script>
 </body>
 </html>
