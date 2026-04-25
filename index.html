@@ -10,16 +10,20 @@
 <style>
 body {
   font-family: Arial;
-  background: linear-gradient(135deg,#1e3c72,#2a5298);
+  background: linear-gradient(135deg,#141e30,#243b55,#2a5298);
   color: white;
   margin: 0;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .container {
   max-width: 900px;
   margin: auto;
   padding: 20px;
   width: 95%;
+  box-sizing: border-box;
 }
 .section { background: rgba(255,255,255,0.1); padding: 15px; margin: 15px 0; border-radius: 10px; animation: fadeIn 0.5s ease; }
 input, textarea {
@@ -40,6 +44,7 @@ button {
   margin-top: 10px;
   border-radius: 8px;
   font-size: 16px;
+  min-height: 48px;
 }
 .timer { text-align: center; font-size: 20px; }
 @keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
@@ -76,7 +81,7 @@ Batch Time: <input id="batch"><br>
 <p>• Enter your Name and Batch before submitting.</p>
 </div>
 
-<div class="timer" id="timer">70:00</div>
+<div class="timer" id="timer">65:00</div>
 
 <div id="quiz"></div>
 
@@ -86,7 +91,7 @@ Batch Time: <input id="batch"><br>
 
 <script>
 
-let time = 70 * 60;
+let time = 65 * 60;
 let locked = false;
 if(localStorage.getItem("testLocked") === "true"){
   document.body.innerHTML = "<h1 style='text-align:center'>Test Locked ❌</h1>";
@@ -94,7 +99,11 @@ if(localStorage.getItem("testLocked") === "true"){
 }
 
 let t = setInterval(()=>{
-  if(time <= 0){ clearInterval(t); lockTest(); return; }
+  if(time <= 0){
+    clearInterval(t);
+    submitTest();
+    return;
+  }
   let m = Math.floor(time/60);
   let s = time%60;
   document.getElementById("timer").innerHTML = m+":"+(s<10?"0":"")+s;
@@ -103,6 +112,10 @@ let t = setInterval(()=>{
 
 function lockTest(){
   if(locked) return;
+
+  // don't lock if test already submitted
+  if(lastReport) return;
+
   locked = true;
   localStorage.setItem("testLocked","true");
   document.body.innerHTML = "<h1 style='text-align:center'>Test Locked ❌</h1>";
@@ -230,7 +243,7 @@ function normalize(s){
 let lastReport=null;
 
 function submitTest(){
-  if(locked) return;
+  if(locked || lastReport) return;
 
   let name=document.getElementById("name").value;
   let batch=document.getElementById("batch").value;
@@ -298,14 +311,15 @@ function submitTest(){
 
   let report=`Name:${name}\nBatch:${batch}\nScore:${score}/${total}\n\n${detailedReport}`;
 
-  let resultBox=document.getElementById("resultBox");
-  if(!resultBox){
-    resultBox=document.createElement("div");
-    resultBox.id="resultBox";
-    resultBox.className="section";
-    document.querySelector(".container").appendChild(resultBox);
-  }
-  resultBox.innerHTML=`<h2>Result</h2><p>Score: ${score}/${total}</p><p>PDF downloading...</p>`;
+  document.body.innerHTML = `
+<div style="display:flex;align-items:center;justify-content:center;height:100vh;text-align:center;padding:20px;">
+  <div style="background:rgba(255,255,255,0.1);padding:30px;border-radius:15px;width:100%;max-width:400px;">
+    <h1>Test Submitted ✅</h1>
+    <h2>Score: ${score}/${total}</h2>
+    <p>Your result has been recorded.</p>
+  </div>
+</div>
+`;
 
   const jsPDFCtor = window.jspdf && window.jspdf.jsPDF;
   if(jsPDFCtor){
@@ -319,6 +333,9 @@ function submitTest(){
   }, 300);
 
   lastReport=report;
+
+  locked = true;
+  localStorage.setItem("testLocked","true");
 }
 
 </script>
