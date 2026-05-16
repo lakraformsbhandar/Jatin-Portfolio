@@ -20,19 +20,20 @@ body {
 }
 .container {
   max-width: 900px;
+  width: 100%;
   margin: auto;
   padding: 20px;
-  width: 95%;
   box-sizing: border-box;
 }
 .section { background: rgba(255,255,255,0.1); padding: 15px; margin: 15px 0; border-radius: 10px; animation: fadeIn 0.5s ease; }
 input, textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin: 8px 0;
   border-radius: 8px;
   border: none;
   font-size: 16px;
+  box-sizing: border-box;
 }
 button {
   padding: 12px;
@@ -47,6 +48,45 @@ button {
   min-height: 48px;
 }
 .timer { text-align: center; font-size: 20px; }
+
+@media(max-width:768px){
+
+  body{
+    font-size:15px;
+  }
+
+  .container{
+    width:100%;
+    padding:12px;
+  }
+
+  .section{
+    padding:12px;
+    margin:12px 0;
+  }
+
+  h1{
+    font-size:28px;
+    text-align:center;
+  }
+
+  h2{
+    font-size:20px;
+  }
+
+  button{
+    font-size:18px;
+  }
+
+  input,textarea{
+    font-size:16px;
+  }
+
+  .timer{
+    font-size:24px;
+  }
+}
+
 @keyframes fadeIn { from {opacity:0; transform: translateY(10px);} to {opacity:1; transform: translateY(0);} }
 </style>
 </head>
@@ -54,7 +94,7 @@ button {
 <body>
 <div id="app"></div><div class="container">
 
-<h1>German with Jatin</h1>
+<h1>CODE WITH JITU❌  GERMAN WITH JITU✔️</h1>
 
 <div>
 Name: <input id="name"><br>
@@ -63,38 +103,96 @@ Batch Time: <input id="batch"><br>
 
 <div class="section">
 <h2>Instructions</h2>
-<p>• Total Time: 70 Minutes</p>
+<p><b>How to Attempt the Test:</b></p>
+<p>• Read every question carefully before answering.</p>
+<p>• Type answers in German wherever required.</p>
+<p>• Translation questions should be answered completely.</p>
+<p>• Fill in the blanks using only the correct missing word or phrase.</p>
+<p>• Sentence formation questions must be grammatically correct.</p>
+<p>• Write complete plural/article forms wherever asked.</p>
+<p>• Small spelling mistakes may still be accepted automatically.</p>
+<p>• The test contains 8 sections covering German A1 grammar and vocabulary.</p>
+<hr>
+<p><b>Sections Included:</b></p>
+<p>SECTION A — Seasons, Months, Days & Directions</p>
+<p>SECTION B — Pronouns & Verb Conjugation</p>
+<p>SECTION C — Articles & Plurals</p>
+<p>SECTION D — Ja/Nein, Kein/Nicht</p>
+<p>SECTION E — Prepositions</p>
+<p>SECTION F — Modal Verbs & Trennbare Verben</p>
+<p>SECTION G — W-Fragen & Connectors</p>
+<p>SECTION H — Tenses & Irregular Verbs</p>
+<hr>
+<p>• Total Questions: 60</p>
+<p>• Total Time: 1 Hour</p>
+<p>• Total Marks: 60</p>
 <p>• Fill all answers carefully.</p>
-<p>• Do not switch tabs or minimize (test will lock).</p>
-<p>• Answers are auto-checked (case, spacing, and small spelling mistakes are ignored).</p>
-<p>• Sections include:</p>
-<p>1. Vocabulary (English → German)</p>
-<p>2. Articles (der/die/das)</p>
-<p>3. Conjugation</p>
-<p>4. Modal Verbs</p>
-<p>5. Prepositions</p>
-<p>6. Akkusativ / Dativ</p>
-<p>7. Conjunctions</p>
-<p>8. Imperative</p>
-<p>9. Perfekt (Past Tense)</p>
-<p>10. Basic German / NVDA Phrases</p>
-<p>• Enter your Name and Batch before submitting.</p>
+<p>• Do not switch tabs or minimize the screen.</p>
+<p>• Do not minimize, switch apps or change browser tabs during the test.</p>
+<p>• If suspicious activity is detected, the test will permanently lock.</p>
+<p>• Once locked, the same device cannot reopen the exam again.</p>
+<p>• Keep the test screen open continuously during the exam.</p>
+<p>• After submission, your score report opens directly in email.</p>
+<p>• Full PDF report with all questions, student answers, correct answers and results will automatically download.</p>
 </div>
 
-<div class="timer" id="timer">65:00</div>
+<div class="timer" id="timer">60:00</div>
+
+<div class="section" style="text-align:center;">
+<h2>Secure Exam Mode Active</h2>
+<p style="color:#ffcccb;font-weight:bold;">Do not minimize, switch apps or change tabs during the exam.</p>
+</div>
 
 <div id="quiz"></div>
 
-<button onclick="submitTest()">Submit</button>
+<button onclick="submitTest()">Submit Mega Test</button>
 
 </div>
 
 <script>
 
-let time = 65 * 60;
+let time = 60 * 60;
 let locked = false;
-if(localStorage.getItem("testLocked") === "true"){
-  document.body.innerHTML = "<h1 style='text-align:center'>Test Locked ❌</h1>";
+let visibilityTimer = null;
+let blurTimer = null;
+let cameraStarted = false;
+let testStartedAt = Date.now();
+let warningCount = 0;
+let aiMonitoringActive = false;
+let hiddenStartTime = null;
+let blurStartTime = null;
+let mobileMode = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+function startCamera(){
+  // camera system removed completely
+  return true;
+}
+// reset accidental previous locks on fresh open
+if(performance.navigation.type === 1){
+  localStorage.removeItem("testLocked");
+}
+if(
+  localStorage.getItem("testLocked") === "true" ||
+  sessionStorage.getItem("testLocked") === "true"
+){
+
+  document.body.innerHTML = `
+<div style="display:flex;justify-content:center;align-items:center;height:100vh;padding:20px;text-align:center;background:#111;color:white;">
+  <div style="max-width:500px;background:#1f1f1f;padding:30px;border-radius:18px;border:2px solid red;">
+    <h1 style="color:red;font-size:38px;">TEST LOCKED ❌</h1>
+    <p style="font-size:20px;line-height:1.7;">
+      Your test has been permanently closed because suspicious activity was detected.
+    </p>
+    <p style="font-size:18px;color:#ffb3b3;">
+      Minimize, app switching or tab switching is not allowed during the exam.
+    </p>
+    <p style="font-size:18px;color:#ffb3b3;">
+      This device can no longer reopen the test.
+    </p>
+  </div>
+</div>
+`;
+
   throw new Error("Test already locked");
 }
 
@@ -110,112 +208,181 @@ let t = setInterval(()=>{
   time--;
 },1000);
 
-function lockTest(){
-  if(locked) return;
-
-  // don't lock if test already submitted
-  if(lastReport) return;
-
-  locked = true;
-  localStorage.setItem("testLocked","true");
-  document.body.innerHTML = "<h1 style='text-align:center'>Test Locked ❌</h1>";
-}
-
-window.addEventListener("beforeunload", function (e) {
-  e.preventDefault();
-  e.returnValue = '';
-});
+// STRICT SCREEN LOCK SYSTEM
+// minimize, app switching or tab switching permanently closes the exam
 
 document.addEventListener("visibilitychange",()=>{
-  if(document.hidden){
-    lockTest();
+
+  if(document.hidden && !locked && !lastReport){
+
+    try{
+      localStorage.setItem("testLocked","true");
+      sessionStorage.setItem("testLocked","true");
+    }catch(e){
+      console.log("Storage unavailable");
+    }
+
+    document.body.innerHTML = `
+<div style="display:flex;justify-content:center;align-items:center;height:100vh;padding:20px;background:#111;color:white;text-align:center;">
+  <div style="max-width:520px;background:#1f1f1f;padding:35px;border-radius:18px;border:2px solid red;">
+    <h1 style="font-size:40px;color:red;">TEST LOCKED ❌</h1>
+    <p style="font-size:20px;line-height:1.8;">
+      Your exam has been permanently closed because app switching,
+      screen minimize or tab switching was detected.
+    </p>
+    <p style="font-size:18px;color:#ffb3b3;">
+      This device cannot reopen the test again.
+    </p>
+  </div>
+</div>
+`;
+
+    locked = true;
+    throw new Error("Test locked permanently");
+  }
+});
+
+// additional focus-loss protection
+window.addEventListener("blur",()=>{
+
+  if(lastReport || locked) return;
+
+  setTimeout(()=>{
+
+    if(document.hidden && !locked && !lastReport){
+
+      try{
+        localStorage.setItem("testLocked","true");
+        sessionStorage.setItem("testLocked","true");
+      }catch(e){
+        console.log("Storage unavailable");
+      }
+
+      document.body.innerHTML = `
+<div style="display:flex;justify-content:center;align-items:center;height:100vh;padding:20px;background:#111;color:white;text-align:center;">
+  <div style="max-width:520px;background:#1f1f1f;padding:35px;border-radius:18px;border:2px solid red;">
+    <h1 style="font-size:40px;color:red;">TEST LOCKED ❌</h1>
+    <p style="font-size:20px;line-height:1.8;">
+      Browser focus loss or screen switching was detected.
+    </p>
+    <p style="font-size:18px;color:#ffb3b3;">
+      This device can no longer continue the exam.
+    </p>
+  </div>
+</div>
+`;
+
+      locked = true;
+      throw new Error("Test locked permanently");
+    }
+
+  },1000);
+});
+
+window.addEventListener("focus",()=>{
+
+  // once locked, never restore test again
+  if(
+    localStorage.getItem("testLocked") === "true" ||
+    sessionStorage.getItem("testLocked") === "true"
+  ){
+
+    document.body.innerHTML = `
+<div style="display:flex;justify-content:center;align-items:center;height:100vh;padding:20px;text-align:center;background:#111;color:white;">
+  <div style="max-width:500px;background:#1f1f1f;padding:30px;border-radius:18px;border:2px solid red;">
+    <h1 style="color:red;font-size:38px;">TEST LOCKED ❌</h1>
+    <p style="font-size:20px;line-height:1.7;">
+      Your test has been permanently closed because screen minimize,
+      tab switching, app switching or browser focus loss was detected.
+    </p>
+    <p style="font-size:18px;color:#ffb3b3;">
+      This device can no longer access the test.
+    </p>
+  </div>
+</div>
+`;
+
+    throw new Error("Test permanently locked");
+  }
+
+  blurStartTime = null;
+
+  if(blurTimer){
+    clearTimeout(blurTimer);
+  }
+
+  if(visibilityTimer){
+    clearTimeout(visibilityTimer);
   }
 });
 
 const data = [
-["I stay in Berlin","ich lebe in berlin"],
-["She eats an apple","sie isst einen apfel"],
-["We play soccer","wir spielen fußball"],
-["He reads a book","er liest ein buch"],
-["They drink coffee","sie trinken kaffee"],
-["I study German","ich lerne deutsch"],
-["You feel happy","du bist glücklich"],
-["We work daily","wir arbeiten täglich"],
-["___ Mann","der mann"],
-["___ Frau","die frau"],
-["___ Kind","das kind"],
-["___ Tisch","der tisch"],
-["___ Auto","das auto"],
-["Ich ___ (gehen) ins Büro","gehe"],
-["Du ___ (spielen) heute","spielst"],
-["Er ___ (kommen) morgen","kommt"],
-["Wir ___ (lernen) viel","lernen"],
-["Sie ___ (arbeiten) hier","arbeitet"],
-["Ich ___ (haben) Zeit","habe"],
-["Du ___ (sein) krank","bist"],
-["Er ___ (machen) das","macht"],
-["Wir ___ (trinken) Tee","trinken"],
-["Sie ___ (lesen) Buch","liest"],
-["Ich ___ Deutsch verstehen","kann"],
-["Du ___ mehr lernen","musst"],
-["Er ___ schlafen","will"],
-["Wir ___ arbeiten","müssen"],
-["Sie ___ hier sitzen","dürfen"],
-["Ich ___ Pizza essen","möchte"],
-["Du ___ helfen","sollst"],
-["Er ___ gehen","soll"],
-["Wir ___ reisen","wollen"],
-["Sie ___ spielen","können"],
-["Ich gehe ___ Schule","zur"],
-["Er fährt ___ Hamburg","nach"],
-["Wir kommen ___ Hause","nach"],
-["Ich rede ___ dir","mit"],
-["Sie geht ___ Arzt","zum"],
-["Das Buch ist ___ Tisch","auf dem"],
-["Ich wohne ___ Deutschland","in"],
-["Wir fahren ___ Zug","mit dem"],
-["Er kommt ___ mir","zu"],
-["Ich gehe ___ Kino","ins"],
-["Ich sehe ___ Mann","den mann"],
-["Ich gebe ___ Frau das Buch","der frau"],
-["Er hilft ___ Kind","dem kind"],
-["Wir kaufen ___ Auto","ein auto"],
-["Sie spricht mit ___ Lehrer","dem lehrer"],
-["Ich bleibe, ___ ich krank bin","weil"],
-["Er lernt, ___ er arbeitet","weil"],
-["Ich trinke Tee ___ Kaffee","oder"],
-["Sie ist müde, ___ sie schläft","und"],
-["Wir gehen raus ___ es regnet","obwohl"],
-["Ich bleibe zu Hause ___ ich krank bin","weil"],
-["Er spielt, ___ er Zeit hat","wenn"],
-["Ich esse Pizza, ___ ich Hunger habe","weil"],
-["Sie liest, ___ sie wartet","während"],
-["Kommst du, ___ gehst du?","oder"],
-["kommen","komm"],
-["essen","iss"],
-["trinken","trink"],
-["lernen","lern"],
-["sprechen","sprich"],
-["machen","mach"],
-["Ich gehe nach Hause","bin nach hause gegangen"],
-["Er spielt Fußball","hat fußball gespielt"],
-["Wir lernen Deutsch","haben deutsch gelernt"],
-["Sie kauft Brot","hat brot gekauft"],
-["Ich mache Hausaufgaben","habe hausaufgaben gemacht"],
-["Du kommst spät","bist spät gekommen"],
-["Good morning","guten morgen"],
-["Good night","gute nacht"],
-["Thank you","danke"],
-["Sorry","entschuldigung"],
-["How are you?","wie geht es dir"],
-["My name is ___","ich heiße ___"],
-["Where are you from?","woher kommst du"],
-["I don't understand","ich verstehe nicht"],
-["Please speak slowly","bitte langsam sprechen"],
-["Can you help me?","kannst du mir helfen"]
+["Summer","der sommer"],
+["Der Winter","winter"],
+["Write all 7 weekdays in German.","montag dienstag mittwoch donnerstag freitag samstag sonntag"],
+["What is August in German?","august"],
+["East","osten"],
+["Der Sonntag kommt nach ________.","samstag"],
+["Write all 12 months in German.","januar februar marz april mai juni juli august september oktober november dezember"],
+["Die Hauptstadt von Deutschland ist ________.","berlin"],
+["Name any 3 neighboring countries of Germany.","frankreich polen osterreich"],
+["I like spring.","ich mag den fruhling"],
+["Conjugate machen: ich ________","mache"],
+["Conjugate lernen: wir ________","lernen"],
+["Conjugate kochen: du ________","kochst"],
+["She drinks tea.","sie trinkt tee"],
+["(lachen / wir)","wir lachen"],
+["Correct the sentence: Ich lernen Deutsch.","ich lerne deutsch"],
+["Er ________ Fußball. (spielen)","spielt"],
+["They search the bag.","sie suchen die tasche"],
+["Write 6 personal pronouns in German.","ich du er sie es wir"],
+["Make a sentence using besuchen","ich besuche meinen freund"],
+["______ Tisch","der"],
+["______ Lampe","die"],
+["das Kind → ________","die kinder"],
+["die Frau → ________","die frauen"],
+["Das ist ______ Auto. (ein/eine)","ein"],
+["These are books.","das sind bucher"],
+["this = ________","dies"],
+["Der Student ist nett.","die studenten sind nett"],
+["Kommst du aus Indien?","ja ich komme aus indien"],
+["Ich habe ______ Hund.","keinen"],
+["Das ist ______ gut.","nicht"],
+["Ich habe Geld.","ich habe kein geld"],
+["Sie ist müde.","sie ist nicht mude"],
+["No, I do not speak German.","nein ich spreche kein deutsch"],
+["Ich gehe ______ Schule. (to)","zur"],
+["Das Buch ist ______ Tisch. (on)","auf dem"],
+["Which case comes after mit?","dativ"],
+["Which case comes after fur?","akkusativ"],
+["The cat is under the chair.","die katze ist unter dem stuhl"],
+["Ich komme ______ dem Kino.","aus"],
+["Write any 4 Akkusativ prepositions.","fur durch ohne gegen"],
+["Write any 4 Dativ prepositions.","mit nach bei von"],
+["I can swim.","ich kann schwimmen"],
+["We must learn German.","wir mussen deutsch lernen"],
+["Er ______ heute arbeiten. (müssen)","muss"],
+["Separate the verb: aufstehen","auf stehen auf+stehen"],
+["(einkaufen / ich)","ich kaufe ein"],
+["She calls her mother.","sie ruft ihre mutter an"],
+["Write any 5 W-questions.","wer was wann wo warum"],
+["Where do you live?","wo wohnst du"],
+["Make sentence using aber","ich bin mude aber ich arbeite"],
+["Make sentence using denn","ich lerne deutsch denn ich wohne in deutschland"],
+["Ich lerne Deutsch, ______ ich in Deutschland arbeiten möchte.","weil denn"],
+["Rahul loves his girlfriend but she loves pizza more.","rahul liebt seine freundin aber sie liebt pizza mehr"],
+["sein → ________","war"],
+["haben → ________","hatte"],
+["I have eaten.","ich habe gegessen"],
+["Er ______ Arzt werden. (werden)","will"],
+["Yesterday I was tired.","gestern war ich mude"],
+["Write 4 irregular verbs with meaning.","gehen to go essen to eat sehen to see sprechen to speak gehen essen sehen sprechen"]
 ];
 
 window.addEventListener("DOMContentLoaded", ()=>{
+setTimeout(()=>{
+  startCamera();
+},500);
 let quiz=document.getElementById("quiz");
 quiz.innerHTML = "";
 data.forEach((q,i)=>{
@@ -234,8 +401,15 @@ function normalize(s){
     .replace(/ö/g,"o")
     .replace(/ü/g,"u")
     .replace(/ß/g,"ss")
-    .replace(/[.,!?]/g,"")   // remove punctuation
-    .replace(/\s+/g," ");    // normalize spaces
+    .replace(/[.,!?*:+()]/g,"")
+    .replace(/\s+/g," ")
+    .replace(/fruhling/g,"fruhling")
+    .replace(/mude/g,"mude")
+    .replace(/buecher/g,"bucher")
+    .replace(/bücher/g,"bucher")
+    .replace(/österreich/g,"osterreich")
+    .replace(/für/g,"fur");
+
   if(s.length <= 1) return "";
   return s;
 }
@@ -259,21 +433,34 @@ function submitTest(){
   function isClose(a,b){
     if(a === b) return true;
 
-    // allow up to 2 character difference (more lenient)
-    if(Math.abs(a.length - b.length) > 2) return false;
+    if(a.includes(b) || b.includes(a)) return true;
 
-    let i = 0, j = 0, mismatch = 0;
+    // allow more flexible typo checking
+    if(Math.abs(a.length - b.length) > 4) return false;
+
+    let mismatch = 0;
+    let i = 0;
+    let j = 0;
 
     while(i < a.length && j < b.length){
       if(a[i] !== b[j]){
         mismatch++;
-        if(mismatch > 2) return false;
 
-        if(a.length > b.length) i++;
-        else if(b.length > a.length) j++;
-        else { i++; j++; }
+        if(mismatch > 4) return false;
+
+        if(a.length > b.length){
+          i++;
+        }
+        else if(b.length > a.length){
+          j++;
+        }
+        else{
+          i++;
+          j++;
+        }
       } else {
-        i++; j++;
+        i++;
+        j++;
       }
     }
 
@@ -292,14 +479,25 @@ function submitTest(){
       isCorrect = false;
     }
 
-    // exact match or close match
+    // exact match or close typo match
     else if(isClose(u,c)){
       isCorrect = true;
     }
 
-    // partial match ONLY if answer length is meaningful (avoid cheating like 'i', 'in')
-    else if(u.length > 2 && (c.includes(u) || u.includes(c))){
-      isCorrect = true;
+    // accept answers containing important keywords
+    else {
+      const correctWords = c.split(" ");
+      let matched = 0;
+
+      correctWords.forEach(word=>{
+        if(word.length > 2 && u.includes(word)){
+          matched++;
+        }
+      });
+
+      if(matched >= Math.max(1, Math.floor(correctWords.length/2))){
+        isCorrect = true;
+      }
     }
 
     if(isCorrect) score++;
@@ -308,34 +506,134 @@ function submitTest(){
   });
 
   let total=data.length;
+  let percentage = Math.round((score/total)*100);
 
-  let report=`Name:${name}\nBatch:${batch}\nScore:${score}/${total}\n\n${detailedReport}`;
+  let report=`GERMAN A1 MEGA TEST RESULT\n\nName:${name}\nBatch:${batch}\nScore:${score}/${total}\nPercentage:${percentage}%\n\n${detailedReport}`;
+
+  // save all answers BEFORE replacing page
+  const savedAnswers = data.map((q,index)=>{
+    return {
+      question:q[0],
+      correct:q[1],
+      student:document.getElementById("q"+index).value || "Not Answered"
+    };
+  });
 
   document.body.innerHTML = `
 <div style="display:flex;align-items:center;justify-content:center;height:100vh;text-align:center;padding:20px;">
   <div style="background:rgba(255,255,255,0.1);padding:30px;border-radius:15px;width:100%;max-width:400px;">
     <h1>Test Submitted ✅</h1>
     <h2>Score: ${score}/${total}</h2>
+    <h3>${percentage}%</h3>
     <p>Your result has been recorded.</p>
+    <p>Downloading Full Report...</p>
   </div>
 </div>
 `;
 
+  // FULL PDF with all questions, answers and results
   const jsPDFCtor = window.jspdf && window.jspdf.jsPDF;
+
   if(jsPDFCtor){
-    let doc = new jsPDFCtor();
-    doc.text(report, 10, 10);
-    doc.save("result.pdf");
+
+    const fullPdfReport = `
+GERMAN A1 MEGA TEST REPORT
+
+Name: ${name}
+Batch: ${batch}
+Score: ${score}/${total}
+Percentage: ${percentage}%
+
+----------------------------------
+FULL QUESTION PAPER + ANSWERS
+----------------------------------
+
+${savedAnswers.map((entry,index)=>{
+
+  return `${index+1}. ${entry.question}\n\nStudent Answer: ${entry.student}\nCorrect Answer: ${entry.correct}`;
+
+}).join("\n\n----------------------------------\n\n")}
+`;
+
+    const doc = new jsPDFCtor();
+
+    const pageHeight = 280;
+    const margin = 10;
+    const lineHeight = 7;
+
+    const lines = doc.splitTextToSize(fullPdfReport, 180);
+
+    let y = margin;
+
+    lines.forEach(line=>{
+
+      if(y + lineHeight > pageHeight){
+        doc.addPage();
+        y = margin;
+      }
+
+      doc.text(line, margin, y);
+      y += lineHeight;
+    });
+
+    doc.save(`${name}_German_A1_Full_Report.pdf`);
   }
 
+  // secure offline downloadable report
+  // works on all devices without external libraries
+  const fullReport = `
+GERMAN A1 MEGA TEST REPORT
+
+${report}
+
+----------------------------------
+FULL QUESTION PAPER
+----------------------------------
+
+${savedAnswers.map((entry,index)=>{
+return `${index+1}. ${entry.question}\n\nStudent Answer: ${entry.student}\nCorrect Answer: ${entry.correct}`;
+}).join("\n\n----------------------------------\n\n")}
+`;
+
+  const blob = new Blob([fullReport], { type: 'text/plain;charset=utf-8' });
+
+  const downloadLink = document.createElement('a');
+  downloadLink.href = URL.createObjectURL(blob);
+  downloadLink.download = `${name}_German_A1_Full_Report.txt`;
+
+  document.body.appendChild(downloadLink);
+  downloadLink.click();
+  document.body.removeChild(downloadLink);
+
+  // guaranteed email open
   setTimeout(()=>{
-    window.open(`mailto:jatiaanbaha@gmail.com?subject=German Test Result - ${name}&body=${encodeURIComponent(report)}`);
-  }, 300);
 
-  lastReport=report;
+    const subject = encodeURIComponent(`German A1 Mega Test Result - ${name}`);
 
+    const body = encodeURIComponent(
+`GERMAN A1 MEGA TEST RESULT
+
+Name: ${name}
+Batch: ${batch}
+Score: ${score}/${total}
+Percentage: ${percentage}%`
+    );
+
+    const mailLink = `mailto:jatiaanbaha@gmail.com?subject=${subject}&body=${body}`;
+
+    // direct redirect works better than window.open
+    window.location.href = mailLink;
+
+  }, 1500);
+
+  aiMonitoringActive = false;
   locked = true;
-  localStorage.setItem("testLocked","true");
+  try{
+    localStorage.setItem("testLocked","true");
+    sessionStorage.setItem("testLocked","true");
+  }catch(e){
+    console.log("Storage unavailable");
+  }
 }
 
 </script>
