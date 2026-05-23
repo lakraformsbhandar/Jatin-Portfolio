@@ -214,7 +214,7 @@ let t = setInterval(()=>{
 
 document.addEventListener("visibilitychange",()=>{
 
-  if(document.hidden && !locked && !lastReport && document.hasFocus()){
+  if(document.hidden && !locked && !lastReport){
 
     try{
       localStorage.setItem("testLocked","true");
@@ -250,7 +250,7 @@ window.addEventListener("blur",()=>{
 
   setTimeout(()=>{
 
-    if(document.hidden && !locked && !lastReport && time < 3590){
+    if(!locked && !lastReport && time < 3590){
 
       try{
         localStorage.setItem("testLocked","true");
