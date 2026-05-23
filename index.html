@@ -105,34 +105,31 @@ Batch Time: <input id="batch"><br>
 <h2>Instructions</h2>
 <p><b>How to Attempt the Test:</b></p>
 <p>• Read every question carefully before answering.</p>
-<p>• Type answers in German wherever required.</p>
-<p>• Translation questions should be answered completely.</p>
-<p>• Fill in the blanks using only the correct missing word or phrase.</p>
-<p>• Sentence formation questions must be grammatically correct.</p>
-<p>• Write complete plural/article forms wherever asked.</p>
+<p>• Write complete German answers wherever required.</p>
+<p>• Use correct B1 grammar, sentence structure and vocabulary.</p>
+<p>• Translation answers should be meaningful and grammatically correct.</p>
+<p>• Write full sentences for opinion and speaking-style questions.</p>
 <p>• Small spelling mistakes may still be accepted automatically.</p>
-<p>• The test contains 8 sections covering German A1 grammar and vocabulary.</p>
+<p>• The test contains mixed B1 grammar, vocabulary, speaking and writing tasks.</p>
 <hr>
 <p><b>Sections Included:</b></p>
-<p>SECTION A — Seasons, Months, Days & Directions</p>
-<p>SECTION B — Pronouns & Verb Conjugation</p>
-<p>SECTION C — Articles & Plurals</p>
-<p>SECTION D — Ja/Nein, Kein/Nicht</p>
-<p>SECTION E — Prepositions</p>
-<p>SECTION F — Modal Verbs & Trennbare Verben</p>
-<p>SECTION G — W-Fragen & Connectors</p>
-<p>SECTION H — Tenses & Irregular Verbs</p>
+<p>SECTION A — Daily Life & Opinions</p>
+<p>SECTION B — Konjunktiv II & Modal Verbs</p>
+<p>SECTION C — Trennbare Verben & Reflexive Verben</p>
+<p>SECTION D — Adjektiv Endungen & Artikel</p>
+<p>SECTION E — Perfekt & Präteritum</p>
+<p>SECTION F — Nebensätze & Connectors</p>
+<p>SECTION G — Schreiben & Situationen</p>
+<p>SECTION H — Vocabulary & B1 Communication</p>
 <hr>
-<p>• Total Questions: 60</p>
+<p>• Total Questions: 40</p>
 <p>• Total Time: 1 Hour</p>
-<p>• Total Marks: 60</p>
+<p>• Total Marks: 40</p>
 <p>• Fill all answers carefully.</p>
 <p>• Do not switch tabs or minimize the screen.</p>
-<p>• Do not minimize, switch apps or change browser tabs during the test.</p>
 <p>• If suspicious activity is detected, the test will permanently lock.</p>
 <p>• Once locked, the same device cannot reopen the exam again.</p>
 <p>• Keep the test screen open continuously during the exam.</p>
-<p>• After submission, your score report opens directly in email.</p>
 <p>• Full PDF report with all questions, student answers, correct answers and results will automatically download.</p>
 </div>
 
@@ -167,9 +164,13 @@ function startCamera(){
   // camera system removed completely
   return true;
 }
-// reset accidental previous locks on fresh open
-if(performance.navigation.type === 1){
-  localStorage.removeItem("testLocked");
+// preserve permanent lock after suspicious activity
+try{
+  if(sessionStorage.getItem("allowFreshStart") !== "true"){
+    // keep existing lock state
+  }
+}catch(e){
+  console.log("storage check failed");
 }
 if(
   localStorage.getItem("testLocked") === "true" ||
@@ -213,7 +214,7 @@ let t = setInterval(()=>{
 
 document.addEventListener("visibilitychange",()=>{
 
-  if(document.hidden && !locked && !lastReport){
+  if(document.hidden && !locked && !lastReport && document.hasFocus()){
 
     try{
       localStorage.setItem("testLocked","true");
@@ -249,7 +250,7 @@ window.addEventListener("blur",()=>{
 
   setTimeout(()=>{
 
-    if(document.hidden && !locked && !lastReport){
+    if(document.hidden && !locked && !lastReport && time < 3590){
 
       try{
         localStorage.setItem("testLocked","true");
@@ -276,7 +277,7 @@ window.addEventListener("blur",()=>{
       throw new Error("Test locked permanently");
     }
 
-  },1000);
+  },3000);
 });
 
 window.addEventListener("focus",()=>{
@@ -317,72 +318,57 @@ window.addEventListener("focus",()=>{
 });
 
 const data = [
-["Summer","der sommer"],
-["Der Winter","winter"],
-["Write all 7 weekdays in German.","montag dienstag mittwoch donnerstag freitag samstag sonntag"],
-["What is August in German?","august"],
-["East","osten"],
-["Der Sonntag kommt nach ________.","samstag"],
-["Write all 12 months in German.","januar februar marz april mai juni juli august september oktober november dezember"],
-["Die Hauptstadt von Deutschland ist ________.","berlin"],
-["Name any 3 neighboring countries of Germany.","frankreich polen osterreich"],
-["I like spring.","ich mag den fruhling"],
-["Conjugate machen: ich ________","mache"],
-["Conjugate lernen: wir ________","lernen"],
-["Conjugate kochen: du ________","kochst"],
-["She drinks tea.","sie trinkt tee"],
-["(lachen / wir)","wir lachen"],
-["Correct the sentence: Ich lernen Deutsch.","ich lerne deutsch"],
-["Er ________ Fußball. (spielen)","spielt"],
-["They search the bag.","sie suchen die tasche"],
-["Write 6 personal pronouns in German.","ich du er sie es wir"],
-["Make a sentence using besuchen","ich besuche meinen freund"],
-["______ Tisch","der"],
-["______ Lampe","die"],
-["das Kind → ________","die kinder"],
-["die Frau → ________","die frauen"],
-["Das ist ______ Auto. (ein/eine)","ein"],
-["These are books.","das sind bucher"],
-["this = ________","dies"],
-["Der Student ist nett.","die studenten sind nett"],
-["Kommst du aus Indien?","ja ich komme aus indien"],
-["Ich habe ______ Hund.","keinen"],
-["Das ist ______ gut.","nicht"],
-["Ich habe Geld.","ich habe kein geld"],
-["Sie ist müde.","sie ist nicht mude"],
-["No, I do not speak German.","nein ich spreche kein deutsch"],
-["Ich gehe ______ Schule. (to)","zur"],
-["Das Buch ist ______ Tisch. (on)","auf dem"],
-["Which case comes after mit?","dativ"],
-["Which case comes after fur?","akkusativ"],
-["The cat is under the chair.","die katze ist unter dem stuhl"],
-["Ich komme ______ dem Kino.","aus"],
-["Write any 4 Akkusativ prepositions.","fur durch ohne gegen"],
-["Write any 4 Dativ prepositions.","mit nach bei von"],
-["I can swim.","ich kann schwimmen"],
-["We must learn German.","wir mussen deutsch lernen"],
-["Er ______ heute arbeiten. (müssen)","muss"],
+["Make sentence using obwohl","obwohl ich krank bin gehe ich zur arbeit"],
+["Make sentence using deshalb","ich war krank deshalb blieb ich zu hause"],
+["Make sentence using trotzdem","es regnet trotzdem gehe ich spazieren"],
+["Make sentence using während","wahrend ich lerne hort meine schwester musik"],
+["Make sentence using nachdem","nachdem ich gegessen hatte bin ich schlafen gegangen"],
+["Make sentence using bevor","bevor ich schlafe lese ich ein buch"],
+["Make sentence using damit","ich lerne deutsch damit ich in deutschland arbeiten kann"],
+["Make sentence using dass","ich glaube dass er nett ist"],
+["Make sentence using weil","ich lerne deutsch weil ich in deutschland arbeiten mochte"],
+["Complete: Wenn ich Zeit hätte, ________","wurde ich reisen"],
+["Write one sentence using Konjunktiv II.","ich wurde ein auto kaufen"],
+["Translate: If I were rich, I would travel the world.","wenn ich reich ware wurde ich um die welt reisen"],
+["Write one sentence using könnten.","konnten sie mir bitte helfen"],
+["Write one sentence using müssten.","wir mussten mehr lernen"],
+["Conjugate: dürfen (wir)","durfen"],
+["Conjugate: sollen (er)","soll"],
+["Conjugate: wissen (du)","weisst"],
+["Write one sentence using müssen.","ich muss deutsch lernen"],
+["Separate the verb: mitkommen","mit kommen mit+kommen"],
+["Separate the verb: fernsehen","fern sehen fern+sehen"],
 ["Separate the verb: aufstehen","auf stehen auf+stehen"],
-["(einkaufen / ich)","ich kaufe ein"],
-["She calls her mother.","sie ruft ihre mutter an"],
-["Write any 5 W-questions.","wer was wann wo warum"],
-["Where do you live?","wo wohnst du"],
-["Make sentence using aber","ich bin mude aber ich arbeite"],
-["Make sentence using denn","ich lerne deutsch denn ich wohne in deutschland"],
-["Ich lerne Deutsch, ______ ich in Deutschland arbeiten möchte.","weil denn"],
-["Rahul loves his girlfriend but she loves pizza more.","rahul liebt seine freundin aber sie liebt pizza mehr"],
-["sein → ________","war"],
-["haben → ________","hatte"],
-["I have eaten.","ich habe gegessen"],
-["Er ______ Arzt werden. (werden)","will"],
-["Yesterday I was tired.","gestern war ich mude"],
-["Write 4 irregular verbs with meaning.","gehen to go essen to eat sehen to see sprechen to speak gehen essen sehen sprechen"]
+["Make sentence using sich freuen","ich freue mich auf den urlaub"],
+["Write one reflexive verb.","sich erinnern"],
+["Translate: She gets ready quickly.","sie macht sich schnell fertig"],
+["Der ______ Mann ist freundlich. (alt)","alte"],
+["Ich habe einen ______ Hund. (klein)","kleinen"],
+["Das ist eine ______ Tasche. (schon)","schone"],
+["Write plural of das Museum.","die museen"],
+["Write article of Universität.","die"],
+["Perfekt of sehen","hat gesehen"],
+["Präteritum of haben","hatte"],
+["Präteritum of gehen","ging"],
+["Translate: Yesterday I went to the market.","gestern bin ich zum markt gegangen"],
+["Translate: We have already finished the work.","wir haben die arbeit schon beendet"],
+["Complete: Nachdem ich gegessen hatte, ________","bin ich schlafen gegangen"],
+["Complete: Ich bleibe zu Hause, obwohl ________","das wetter gut ist"],
+["Write one Nebensatz sentence.","weil ich krank bin bleibe ich zu hause"],
+["Write one sentence in Perfekt.","ich habe deutsch gelernt"],
+["Write one sentence in Präteritum.","ich war gestern mude"],
+["Write one sentence using werden.","ich werde arzt werden"]
 ];
 
 window.addEventListener("DOMContentLoaded", ()=>{
 setTimeout(()=>{
   startCamera();
 },500);
+try{
+  sessionStorage.setItem("allowFreshStart","false");
+}catch(e){
+  console.log("session flag failed");
+}
 let quiz=document.getElementById("quiz");
 quiz.innerHTML = "";
 data.forEach((q,i)=>{
@@ -401,7 +387,7 @@ function normalize(s){
     .replace(/ö/g,"o")
     .replace(/ü/g,"u")
     .replace(/ß/g,"ss")
-    .replace(/[.,!?*:+()]/g,"")
+    .replace(/[.,!?*:+()"'-]/g,"")
     .replace(/\s+/g," ")
     .replace(/fruhling/g,"fruhling")
     .replace(/mude/g,"mude")
@@ -422,7 +408,7 @@ function submitTest(){
   let name=document.getElementById("name").value;
   let batch=document.getElementById("batch").value;
 
-  if(!name || !batch){
+  if(!name.trim() || !batch.trim()){
     alert("Enter Name & Batch");
     return;
   }
@@ -436,7 +422,7 @@ function submitTest(){
     if(a.includes(b) || b.includes(a)) return true;
 
     // allow more flexible typo checking
-    if(Math.abs(a.length - b.length) > 4) return false;
+    if(Math.abs(a.length - b.length) > 6) return false;
 
     let mismatch = 0;
     let i = 0;
@@ -446,7 +432,7 @@ function submitTest(){
       if(a[i] !== b[j]){
         mismatch++;
 
-        if(mismatch > 4) return false;
+        if(mismatch > 6) return false;
 
         if(a.length > b.length){
           i++;
@@ -502,13 +488,14 @@ function submitTest(){
 
     if(isCorrect) score++;
 
+
     detailedReport += `Q${i+1}: ${q[0]}\nYour Answer: ${userAns}\nCorrect Answer: ${q[1]}\nResult: ${isCorrect ? "Correct" : "Wrong"}\n\n`;
   });
 
   let total=data.length;
   let percentage = Math.round((score/total)*100);
 
-  let report=`GERMAN A1 MEGA TEST RESULT\n\nName:${name}\nBatch:${batch}\nScore:${score}/${total}\nPercentage:${percentage}%\n\n${detailedReport}`;
+  let report=`GERMAN B1 GRAMMAR TEST RESULT\n\nName:${name}\nBatch:${batch}\nScore:${score}/${total}\nPercentage:${percentage}%\n\n${detailedReport}`;
 
   // save all answers BEFORE replacing page
   const savedAnswers = data.map((q,index)=>{
@@ -537,7 +524,7 @@ function submitTest(){
   if(jsPDFCtor){
 
     const fullPdfReport = `
-GERMAN A1 MEGA TEST REPORT
+GERMAN B1 GRAMMAR TEST REPORT
 
 Name: ${name}
 Batch: ${batch}
@@ -557,7 +544,7 @@ ${savedAnswers.map((entry,index)=>{
 
     const doc = new jsPDFCtor();
 
-    const pageHeight = 280;
+    const pageHeight = 270;
     const margin = 10;
     const lineHeight = 7;
 
@@ -576,13 +563,13 @@ ${savedAnswers.map((entry,index)=>{
       y += lineHeight;
     });
 
-    doc.save(`${name}_German_A1_Full_Report.pdf`);
+    doc.save(`${name}_German_B1_Grammar_Report.pdf`);
   }
 
   // secure offline downloadable report
   // works on all devices without external libraries
   const fullReport = `
-GERMAN A1 MEGA TEST REPORT
+GERMAN B1 GRAMMAR TEST REPORT
 
 ${report}
 
@@ -599,7 +586,7 @@ return `${index+1}. ${entry.question}\n\nStudent Answer: ${entry.student}\nCorre
 
   const downloadLink = document.createElement('a');
   downloadLink.href = URL.createObjectURL(blob);
-  downloadLink.download = `${name}_German_A1_Full_Report.txt`;
+  downloadLink.download = `${name}_German_B1_Grammar_Report.txt`;
 
   document.body.appendChild(downloadLink);
   downloadLink.click();
@@ -608,10 +595,10 @@ return `${index+1}. ${entry.question}\n\nStudent Answer: ${entry.student}\nCorre
   // guaranteed email open
   setTimeout(()=>{
 
-    const subject = encodeURIComponent(`German A1 Mega Test Result - ${name}`);
+    const subject = encodeURIComponent(`German B1 Grammar Test Result - ${name}`);
 
     const body = encodeURIComponent(
-`GERMAN A1 MEGA TEST RESULT
+`GERMAN B1 GRAMMAR TEST RESULT
 
 Name: ${name}
 Batch: ${batch}
